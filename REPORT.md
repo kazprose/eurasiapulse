@@ -1,6 +1,6 @@
 # REPORT.md — EurasiaPulse WordPress theme
 
-Deliverables: `eurasiapulse/` (theme source), `eurasiapulse.zip` (installable), `eurasiapulse/readme.txt` (installation guide), `DECISIONS.md` (34 recorded assumptions), `screenshots/` (36 template screenshots + admin screens + Lighthouse reports), `dev/` (local environment and QA scripts). Six local git commits, no push, no deploy.
+Deliverables: `eurasiapulse/` (theme source), `eurasiapulse.zip` (installable), `eurasiapulse/readme.txt` (installation guide), `DECISIONS.md` (34 recorded assumptions), `screenshots/` (36 template screenshots + admin screens + Lighthouse reports), `dev/` (local environment and QA scripts). Three local git commits (stages 1–3, 4–5, 6), no push, no deploy.
 
 ## 1. What was built
 
