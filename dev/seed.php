@@ -17,9 +17,24 @@ require_once ABSPATH . 'wp-admin/includes/file.php';
 require_once ABSPATH . 'wp-admin/includes/media.php';
 
 $force = in_array( '--force', $argv, true );
-if ( get_option( 'eurasiapulse_seeded' ) && ! $force ) {
-	echo "Already seeded (use --force to add again).\n";
+$reset = in_array( '--reset', $argv, true );
+if ( $reset ) {
+	// Remove every post, page and attachment so the seed starts from a clean slate.
+	foreach ( get_posts( array( 'post_type' => array( 'post', 'page', 'attachment' ), 'post_status' => 'any', 'numberposts' => -1, 'fields' => 'ids' ) ) as $id ) {
+		wp_delete_post( $id, true );
+	}
+	delete_option( 'eurasiapulse_seeded' );
+	echo "Reset: all posts, pages and attachments deleted.\n";
+} elseif ( get_option( 'eurasiapulse_seeded' ) && ! $force ) {
+	echo "Already seeded (use --force to add again, --reset to start over).\n";
 	exit;
+}
+// Default WordPress sample content is not useful for layout testing.
+foreach ( array( 'hello-world' => 'post', 'sample-page' => 'page' ) as $slug => $type ) {
+	$default = get_page_by_path( $slug, OBJECT, $type );
+	if ( $default ) {
+		wp_delete_post( $default->ID, true );
+	}
 }
 if ( 'eurasiapulse' !== get_option( 'stylesheet' ) ) {
 	echo "Theme not active. Run dev/activate.php first.\n";
@@ -137,7 +152,8 @@ function ep_seed_body( $p, $image_id, $variant ) {
 /* ---------- Posts ---------- */
 $categories = array( 'politics', 'economy', 'security', 'energy', 'diplomacy' );
 $regions    = array( 'kazakhstan', 'uzbekistan', 'kyrgyzstan', 'tajikistan', 'turkmenistan', 'caucasus', 'russia', 'china', 'global' );
-$formats    = array( 'news', 'news', 'analysis', 'news', 'opinion', 'explainer', 'news', 'analysis', 'interview', 'opinion' );
+// Seven entries so the format rotation never lines up with the five categories.
+$formats    = array( 'news', 'analysis', 'news', 'opinion', 'explainer', 'news', 'interview' );
 $long_title = 'Sample headline for layout testing with a deliberately long title that wraps across several lines to check spacing, hyphenation and the vertical rhythm of cards';
 $titles     = array();
 for ( $i = 1; $i <= 40; $i++ ) {

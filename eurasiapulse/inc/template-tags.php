@@ -75,6 +75,45 @@ function eurasiapulse_lead_query() {
 	return eurasiapulse_query( array( 'posts_per_page' => 1 ) );
 }
 
+/**
+ * Posts for a format-driven homepage block (Analysis, Opinion), cached per call
+ * so the front page can reserve them before the section blocks run.
+ *
+ * @param string $slug  Format term slug, or "none".
+ * @param int    $count Number of posts.
+ * @return WP_Query|null
+ */
+function eurasiapulse_format_block_query( $slug, $count ) {
+	static $cache = array();
+	$slug  = (string) $slug;
+	$count = (int) $count;
+	$key   = $slug . '|' . $count;
+	if ( array_key_exists( $key, $cache ) ) {
+		return $cache[ $key ];
+	}
+	$cache[ $key ] = null;
+	if ( 'none' === $slug || '' === $slug || $count < 1 ) {
+		return null;
+	}
+	$term = get_term_by( 'slug', $slug, 'format' );
+	if ( ! $term instanceof WP_Term ) {
+		return null;
+	}
+	$cache[ $key ] = eurasiapulse_query(
+		array(
+			'posts_per_page' => $count,
+			'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+				array(
+					'taxonomy' => 'format',
+					'field'    => 'term_id',
+					'terms'    => $term->term_id,
+				),
+			),
+		)
+	);
+	return $cache[ $key ];
+}
+
 /* -------------------------------------------------------------------------
  * Terms
  * ---------------------------------------------------------------------- */

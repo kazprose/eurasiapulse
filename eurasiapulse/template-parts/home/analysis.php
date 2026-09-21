@@ -6,29 +6,11 @@
  */
 
 $eurasiapulse_slug  = (string) eurasiapulse_mod( 'analysis_format' );
-$eurasiapulse_count = (int) eurasiapulse_mod( 'analysis_count' );
-if ( 'none' === $eurasiapulse_slug || $eurasiapulse_count < 1 ) {
+$eurasiapulse_query = eurasiapulse_format_block_query( $eurasiapulse_slug, (int) eurasiapulse_mod( 'analysis_count' ) );
+if ( ! $eurasiapulse_query || ! $eurasiapulse_query->posts ) {
 	return;
 }
 $eurasiapulse_term = get_term_by( 'slug', $eurasiapulse_slug, 'format' );
-if ( ! $eurasiapulse_term instanceof WP_Term ) {
-	return;
-}
-$eurasiapulse_query = eurasiapulse_query(
-	array(
-		'posts_per_page' => $eurasiapulse_count,
-		'tax_query'      => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-			array(
-				'taxonomy' => 'format',
-				'field'    => 'term_id',
-				'terms'    => $eurasiapulse_term->term_id,
-			),
-		),
-	)
-);
-if ( ! $eurasiapulse_query->posts ) {
-	return;
-}
 $eurasiapulse_link = get_term_link( $eurasiapulse_term );
 ?>
 <section class="section analysis" aria-labelledby="analysis-title">

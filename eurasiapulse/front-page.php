@@ -18,6 +18,8 @@ get_header();
 	get_template_part( 'template-parts/home/lead' );
 	get_template_part( 'template-parts/home/latest' );
 	get_template_part( 'template-parts/home/analysis' );
+	// Reserve the Opinion posts now so the section blocks below cannot consume them.
+	eurasiapulse_format_block_query( eurasiapulse_mod( 'opinion_format' ), (int) eurasiapulse_mod( 'opinion_count' ) );
 	for ( $eurasiapulse_slot = 1; $eurasiapulse_slot <= 5; $eurasiapulse_slot++ ) {
 		get_template_part( 'template-parts/home/category', null, array( 'slot' => $eurasiapulse_slot ) );
 	}
