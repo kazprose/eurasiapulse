@@ -4,7 +4,6 @@
  *   node dev/lighthouse.mjs
  */
 import lighthouse from 'lighthouse';
-import { launch } from 'chrome-launcher';
 import { chromium } from 'playwright';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
@@ -23,16 +22,15 @@ const targets = {
 	category: '/category/politics/',
 };
 
-const chrome = await launch( {
-	chromePath: chromium.executablePath(),
-	chromeFlags: [ '--headless=new', '--no-sandbox', '--disable-gpu' ],
-} );
+// chrome-launcher cannot spawn in this environment; drive Playwright's Chromium over its debugging port instead.
+const port = 9222 + Math.floor( Math.random() * 500 );
+const chrome = await chromium.launch( { args: [ `--remote-debugging-port=${ port }` ] } );
 
 const summary = [];
 try {
 	for ( const [ name, path ] of Object.entries( targets ) ) {
 		const result = await lighthouse( base + path, {
-			port: chrome.port,
+			port,
 			output: [ 'html', 'json' ],
 			logLevel: 'error',
 			onlyCategories: [ 'performance', 'accessibility', 'best-practices', 'seo' ],
@@ -51,6 +49,6 @@ try {
 		}
 	}
 } finally {
-	await chrome.kill();
+	await chrome.close();
 }
 writeFileSync( resolve( outDir, 'lighthouse-summary.json' ), JSON.stringify( summary, null, 2 ) );

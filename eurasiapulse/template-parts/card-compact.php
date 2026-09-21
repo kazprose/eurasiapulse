@@ -32,7 +32,11 @@ if ( ! isset( $args['show_image'] ) || $args['show_image'] ) {
 		$eurasiapulse_post,
 		'32',
 		$args['size'] ?? ( $eurasiapulse_row ? 'ep-32-m' : 'ep-32-s' ),
-		array( 'sizes' => $args['sizes'] ?? ( $eurasiapulse_row ? '(min-width: 900px) 240px, (min-width: 600px) 200px, 100vw' : '120px' ) )
+		array(
+			'sizes'         => $args['sizes'] ?? ( $eurasiapulse_row ? '(min-width: 900px) 240px, (min-width: 600px) 200px, 100vw' : '120px' ),
+			'loading'       => $args['loading'] ?? 'lazy',
+			'fetchpriority' => $args['fetchpriority'] ?? '',
+		)
 	);
 }
 $eurasiapulse_class = 'card card--compact' . ( $eurasiapulse_row ? ' card--row' : '' ) . ( $eurasiapulse_thumb ? '' : ' card--noimg' );

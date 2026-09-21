@@ -54,7 +54,7 @@ $eurasiapulse_logo_tag = ( is_front_page() && ! is_paged() ) ? 'h1' : 'p';
 				<span class="nav__toggle-label"><?php esc_html_e( 'Menu', 'eurasiapulse' ); ?></span>
 			</button>
 			<?php eurasiapulse_primary_nav(); ?>
-			<a class="nav__search-toggle" href="#header-search" aria-expanded="false" aria-controls="header-search" data-search-toggle>
+			<a class="nav__search-toggle" href="#header-search" aria-label="<?php esc_attr_e( 'Search', 'eurasiapulse' ); ?>" aria-expanded="false" aria-controls="header-search" data-search-toggle>
 				<svg class="nav__search-icon" viewBox="0 0 16 16" width="15" height="15" aria-hidden="true" focusable="false"><circle cx="7" cy="7" r="5"></circle><path d="M11 11l4 4"></path></svg>
 				<span class="nav__search-label"><?php esc_html_e( 'Search', 'eurasiapulse' ); ?></span>
 			</a>

@@ -1,0 +1,655 @@
+# EurasiaPulse WordPress theme.
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: EurasiaPulse 1.0.0\n"
+"Report-Msgid-Bugs-To: https://eurasiapulse.com/\n"
+"POT-Creation-Date: 2026-09-21 21:23+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: eurasiapulse\n"
+"Language: \n"
+
+#: eurasiapulse/404.php:12
+msgid "Error 404"
+msgstr ""
+
+#: eurasiapulse/404.php:13
+msgid "Page not found"
+msgstr ""
+
+#: eurasiapulse/404.php:14
+msgid "The page you are looking for has moved or does not exist. Try a search, or start from one of the sections below."
+msgstr ""
+
+#: eurasiapulse/404.php:17 eurasiapulse/footer.php:27 eurasiapulse/footer.php:28
+msgid "Sections"
+msgstr ""
+
+#: eurasiapulse/404.php:18 eurasiapulse/inc/schema.php:341
+msgid "Home"
+msgstr ""
+
+#: eurasiapulse/author.php:13 eurasiapulse/inc/template-tags.php:728
+msgid "Author"
+msgstr ""
+
+#: eurasiapulse/comments.php:35
+msgid "Comments are closed."
+msgstr ""
+
+#: eurasiapulse/comments.php:41
+msgid "Leave a comment"
+msgstr ""
+
+#: eurasiapulse/comments.php:19
+msgid "%s comment"
+msgid_plural "%s comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: eurasiapulse/footer.php:34 eurasiapulse/footer.php:35 eurasiapulse/inc/taxonomies.php:37
+msgid "Regions"
+msgstr ""
+
+#: eurasiapulse/footer.php:42 eurasiapulse/footer.php:43
+msgid "Company"
+msgstr ""
+
+#: eurasiapulse/footer.php:48
+msgid "Follow"
+msgstr ""
+
+#: eurasiapulse/footer.php:62
+msgid "© %1$s %2$s. All rights reserved."
+msgstr ""
+
+#: eurasiapulse/header.php:19
+msgid "Skip to content"
+msgstr ""
+
+#: eurasiapulse/header.php:28
+msgid "l, F j, Y"
+msgstr ""
+
+#: eurasiapulse/header.php:32
+msgid "Secondary"
+msgstr ""
+
+#: eurasiapulse/header.php:50
+msgid "Primary"
+msgstr ""
+
+#: eurasiapulse/header.php:54
+msgid "Menu"
+msgstr ""
+
+#: eurasiapulse/header.php:57 eurasiapulse/header.php:59 eurasiapulse/inc/template-tags.php:734 eurasiapulse/search.php:13 eurasiapulse/search.php:20 eurasiapulse/searchform.php:13
+msgid "Search"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:165
+msgid "Automatic (default section for this slot)"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:166 eurasiapulse/inc/customizer.php:181
+msgid "Hide this block"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:194
+msgid "Analysis"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:197
+msgid "Opinion"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:213
+msgid "EurasiaPulse"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:214
+msgid "Homepage composition, header and footer links, article options."
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:220
+msgid "Header"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:221
+msgid "Homepage blocks"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:222
+msgid "Article page"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:223
+msgid "Footer & social"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:224
+msgid "Structured data"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:268
+msgid "Show today's date in the top bar"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:277
+msgid "Newsletter link"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:278
+msgid "Shown in the top bar when no \"Top bar links\" menu is assigned."
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:289
+msgid "Lead story layout"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:291
+msgid "Headline over the image (as in the design)"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:292
+msgid "Headline below the image"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:302
+msgid "Lead story selection"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:304
+msgid "Sticky post if any, otherwise the newest post"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:305
+msgid "Always the newest post"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:315
+msgid "Cards under the lead story"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:328
+msgid "Headlines beside the lead story"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:341
+msgid "Show thumbnails beside the lead story"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:350
+msgid "\"Latest\" list: number of items"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:363
+msgid "\"Latest\" list: show thumbnails"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:372
+msgid "\"Analysis\" block: format"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:382
+msgid "\"Analysis\" block: number of cards"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:397
+msgid "Section block %d: category"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:408
+msgid "Section blocks: small items beside the lead card"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:421
+msgid "Show the \"By Region\" strip"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:430
+msgid "\"Opinion\" block: format"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:440
+msgid "\"Opinion\" block: number of items"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:455
+msgid "Show estimated reading time"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:464
+msgid "Show share links (X, Telegram, LinkedIn, copy link)"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:473
+msgid "Show the author box"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:482
+msgid "Related articles"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:495
+msgid "Enable comments"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:496
+msgid "Comments are closed site-wide until this is switched on."
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:507
+msgid "Footer line"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:508
+msgid "Defaults to the site tagline."
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:513
+msgid "X (Twitter) profile URL"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:514
+msgid "Telegram channel URL"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:515
+msgid "LinkedIn page URL"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:516
+msgid "Facebook page URL"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:517
+msgid "YouTube channel URL"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:535
+msgid "Show RSS link"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:546
+msgid "Output JSON-LD and Open Graph tags"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:547
+msgid "Automatically disabled when an SEO plugin (Yoast, Rank Math, AIOSEO, SEOPress, The SEO Framework, Slim SEO) is active."
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:556
+msgid "Organization logo for structured data"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:557
+msgid "Square or wide PNG, at least 112px high. Falls back to the site logo."
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:566
+msgid "Organization profiles (sameAs)"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:567
+msgid "One URL per line. Social profile URLs above are added automatically."
+msgstr ""
+
+#: eurasiapulse/inc/meta.php:24
+msgid "Subtitle (dek / standfirst)"
+msgstr ""
+
+#: eurasiapulse/inc/meta.php:25
+msgid "One or two sentences shown under the headline and used as the meta description."
+msgstr ""
+
+#: eurasiapulse/inc/meta.php:30
+msgid "Source name"
+msgstr ""
+
+#: eurasiapulse/inc/meta.php:31
+msgid "Original source of the story, e.g. an agency or publication."
+msgstr ""
+
+#: eurasiapulse/inc/meta.php:36
+msgid "Source URL"
+msgstr ""
+
+#: eurasiapulse/inc/meta.php:37
+msgid "Link to the original source (http or https)."
+msgstr ""
+
+#: eurasiapulse/inc/meta.php:42
+msgid "Image credit"
+msgstr ""
+
+#: eurasiapulse/inc/meta.php:43
+msgid "Photographer or agency shown under the featured image."
+msgstr ""
+
+#: eurasiapulse/inc/meta.php:112
+msgid "Article details"
+msgstr ""
+
+#: eurasiapulse/inc/schema.php:80
+msgid "Latest %1$s coverage from %2$s."
+msgstr ""
+
+#: eurasiapulse/inc/schema.php:85
+msgid "Articles by %s."
+msgstr ""
+
+#: eurasiapulse/inc/setup.php:42
+msgid "Primary navigation (sections)"
+msgstr ""
+
+#: eurasiapulse/inc/setup.php:43
+msgid "Top bar links (About, Newsletter)"
+msgstr ""
+
+#: eurasiapulse/inc/setup.php:44
+msgid "Footer: Sections column"
+msgstr ""
+
+#: eurasiapulse/inc/setup.php:45
+msgid "Footer: Regions column"
+msgstr ""
+
+#: eurasiapulse/inc/setup.php:46
+msgid "Footer: Company column"
+msgstr ""
+
+#: eurasiapulse/inc/setup.php:74
+msgid "Wide 16:9 (1200px)"
+msgstr ""
+
+#: eurasiapulse/inc/setup.php:75
+msgid "Card 3:2 (720px)"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:29
+msgid "Search regions"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:30
+msgid "All regions"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:31
+msgid "Parent region"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:32
+msgid "Parent region:"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:33
+msgid "Edit region"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:34
+msgid "Update region"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:35
+msgid "Add new region"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:36
+msgid "New region name"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:38
+msgid "No regions found."
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:39
+msgid "&larr; Back to regions"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:41
+msgid "Geographic coverage area of an article."
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:68
+msgid "Search formats"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:69
+msgid "All formats"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:70
+msgid "Edit format"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:71
+msgid "Update format"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:72
+msgid "Add new format"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:73
+msgid "New format name"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:74
+msgid "Formats"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:75
+msgid "Separate formats with commas"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:76
+msgid "Choose from the most used formats"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:77
+msgid "No formats found."
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:78
+msgid "&larr; Back to formats"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:80
+msgid "Editorial format: News, Analysis, Opinion, Explainer, Interview."
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:27
+msgctxt "taxonomy general name"
+msgid "Regions"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:28
+msgctxt "taxonomy singular name"
+msgid "Region"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:66
+msgctxt "taxonomy general name"
+msgid "Formats"
+msgstr ""
+
+#: eurasiapulse/inc/taxonomies.php:67
+msgctxt "taxonomy singular name"
+msgid "Format"
+msgstr ""
+
+#. translators: %s: author name
+#: eurasiapulse/inc/template-tags.php:206 eurasiapulse/template-parts/article-meta.php:23
+msgid "By %s"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:550
+msgid "Newsletter"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:627 eurasiapulse/inc/template-tags.php:694
+msgid "Telegram"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:628 eurasiapulse/inc/template-tags.php:703
+msgid "LinkedIn"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:629
+msgid "Facebook"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:630
+msgid "YouTube"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:645
+msgid "RSS"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:716
+msgid "Section"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:719
+msgid "Region"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:722
+msgid "Format"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:725
+msgid "Topic"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:731 eurasiapulse/inc/template-tags.php:736
+msgid "Archive"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:755
+msgid "All articles"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:767
+msgid "&larr; Newer"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:768
+msgid "Older &rarr;"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:769
+msgid "Articles navigation"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:217 eurasiapulse/template-parts/article-meta.php:48
+msgid "%d min read"
+msgid_plural "%d min read"
+msgstr[0] ""
+msgstr[1] ""
+
+#: eurasiapulse/index.php:12 eurasiapulse/template-parts/home/latest.php:31
+msgid "Latest"
+msgstr ""
+
+#: eurasiapulse/page.php:38
+msgid "Page"
+msgstr ""
+
+#: eurasiapulse/page.php:38 eurasiapulse/single.php:62
+msgid "Pages:"
+msgstr ""
+
+#: eurasiapulse/search.php:18
+msgid "Results for “%s”"
+msgstr ""
+
+#: eurasiapulse/searchform.php:11 eurasiapulse/searchform.php:12
+msgid "Search articles"
+msgstr ""
+
+#: eurasiapulse/single.php:62
+msgid "Article pages"
+msgstr ""
+
+#: eurasiapulse/single.php:76
+msgid "Topics"
+msgstr ""
+
+#: eurasiapulse/template-parts/article-meta.php:32
+msgid "Published %1$s, %2$s"
+msgstr ""
+
+#: eurasiapulse/template-parts/article-meta.php:40
+msgid "Updated %1$s, %2$s"
+msgstr ""
+
+#: eurasiapulse/template-parts/author-box.php:21
+msgid "About the author"
+msgstr ""
+
+#: eurasiapulse/template-parts/author-box.php:30
+msgid "More articles by %s"
+msgstr ""
+
+#: eurasiapulse/template-parts/home/analysis.php:23
+msgid "More %s"
+msgstr ""
+
+#: eurasiapulse/template-parts/home/category.php:36 eurasiapulse/template-parts/home/opinion.php:25
+msgid "All %s"
+msgstr ""
+
+#: eurasiapulse/template-parts/home/latest.php:33
+msgid "All updates"
+msgstr ""
+
+#: eurasiapulse/template-parts/home/lead.php:10
+msgid "No articles have been published yet."
+msgstr ""
+
+#: eurasiapulse/template-parts/home/lead.php:20
+msgid "Top stories"
+msgstr ""
+
+#: eurasiapulse/template-parts/home/regions.php:16
+msgid "By region"
+msgstr ""
+
+#: eurasiapulse/template-parts/home/regions.php:18
+msgid "By Region"
+msgstr ""
+
+#: eurasiapulse/template-parts/loop.php:39
+msgid "No articles found."
+msgstr ""
+
+#: eurasiapulse/template-parts/related.php:55
+msgid "Related"
+msgstr ""
+
+#: eurasiapulse/template-parts/share.php:17
+msgid "Share"
+msgstr ""
+
+#: eurasiapulse/template-parts/share.php:20
+msgid "(opens in a new tab)"
+msgstr ""
+
+#: eurasiapulse/template-parts/share.php:23
+msgid "Link copied"
+msgstr ""
+
+#: eurasiapulse/template-parts/share.php:23
+msgid "Copy link"
+msgstr ""
+
+#: eurasiapulse/template-parts/source-box.php:24
+msgid "Source"
+msgstr ""
+
