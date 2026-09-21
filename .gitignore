@@ -1,0 +1,7 @@
+# Local dev environment (portable PHP + WordPress + SQLite) — not part of the theme
+.local/
+dev/node_modules/
+dev/.lighthouseci/
+*.log
+.DS_Store
+Thumbs.db

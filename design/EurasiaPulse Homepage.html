@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>EurasiaPulse — Politics and analysis across Central Asia and Eurasia</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #FFFFFF; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+    #__bundler_loading { position: fixed; bottom: 20px; right: 20px; font: 13px/1.4 -apple-system, BlinkMacSystemFont, sans-serif; color: #666; background: #fff; padding: 8px 14px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.12); z-index: 10000; }
+    #__bundler_thumbnail { position: fixed; inset: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #FFFFFF; z-index: 9999; }
+    #__bundler_thumbnail svg { width: 100%; height: 100%; object-fit: contain; }
+    #__bundler_placeholder { color: #999; font-size: 14px; }
+  </style>
+  <noscript>
+    <style>#__bundler_loading { display: none; }</style>
+    <div style="position:fixed;bottom:12px;left:12px;font:13px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;color:#999;background:rgba(255,255,255,0.9);padding:6px 12px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.08);z-index:10000;">
+      This page requires JavaScript to display.
+    </div>
+  </noscript>
+</head>
+<body>
+  <div id="__bundler_thumbnail">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <text x="600" y="380" text-anchor="middle" font-family="Georgia, serif" font-weight="600" font-size="110" letter-spacing="22" fill="#121212">EURASIAPULSE</text>
+    <rect x="240" y="440" width="720" height="2" fill="#E2E2E2"></rect>
+    <rect x="560" y="440" width="80" height="4" fill="#B80000"></rect>
+  </svg>
+</div>
+  <div id="__bundler_loading">Unpacking...</div>
+
+  <script>
+    
+document.addEventListener('DOMContentLoaded', async function() {
+  const loading = document.getElementById('__bundler_loading');
+  function setStatus(msg) { if (loading) loading.textContent = msg; }
+
+  const FONT_MIME = /^(font[/]|application[/](x-)?font-|application[/]vnd\.ms-fontobject)/i;
+  const MIME_TOKEN = /^[\w.+-]+[/][\w.+-]+$/;
+  function toBase64(bytes) {
+    let bin = '';
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+      bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    }
+    return btoa(bin);
+  }
+
+  // Error sink persists across replaceWith since it's on window, not the DOM.
+  window.addEventListener('error', function(e) {
+    // Failed resource loads (CSP-blocked links, scripts, images) fire plain
+    // events at the element — warn only; real JS errors carry message/error.
+    if (!e.message && !e.error && e.target && e.target !== window) {
+      console.warn('[bundle] resource failed to load:',
+        e.target.tagName, String(e.target.src || e.target.href || ''));
+      return;
+    }
+    var p = document.body || document.documentElement;
+    var d = document.getElementById('__bundler_err') || p.appendChild(document.createElement('div'));
+    d.id = '__bundler_err';
+    d.style.cssText = 'position:fixed;bottom:12px;left:12px;right:12px;font:12px/1.4 ui-monospace,monospace;background:#2a1215;color:#ff8a80;padding:10px 14px;border-radius:8px;border:1px solid #5c2b2e;z-index:99999;white-space:pre-wrap;max-height:40vh;overflow:auto';
+    d.textContent = (d.textContent ? d.textContent + String.fromCharCode(10) : '') +
+      '[bundle] ' + (e.message || e.type) +
+      (e.filename ? ' (' + e.filename.slice(0, 60) + ':' + e.lineno + ')' : '');
+  }, true);
+
+  try {
+    const manifestEl = document.querySelector('script[type="__bundler/manifest"]');
+    const templateEl = document.querySelector('script[type="__bundler/template"]');
+    if (!manifestEl || !templateEl) {
+      setStatus('Error: missing bundle data');
+      console.error('[bundler] Missing script tags — manifestEl:', !!manifestEl, 'templateEl:', !!templateEl);
+      return;
+    }
+
+    const manifest = JSON.parse(manifestEl.textContent);
+    let template = JSON.parse(templateEl.textContent);
+
+    // Nested page bundles (iframe targets). Each ships ONCE, in the ROOT
+    // document's manifest; frame srcs carry an about:blank#<uuid> marker
+    // instead of a substitutable uuid. Every document mints the blobs for
+    // its OWN frames — from local text at the root, or text obtained from
+    // its DIRECT parent over the relay protocol below — so each frame
+    // navigation stays same-origin with its initiator and a deduped page
+    // loads at any depth on any host, including a file:// download's
+    // opaque origins (where a blob minted by one document cannot be
+    // navigated to by another).
+    const pageOrderEl = document.querySelector('script[type="__bundler/page_order"]');
+    const pageOrder = pageOrderEl ? JSON.parse(pageOrderEl.textContent) : [];
+    const pageSet = new Set(pageOrder);
+    const pageTexts = {};
+
+    // ── Nested-page text protocol (parent-chain relay) ──
+    // Page bundles ship once, in the ROOT document's manifest. Every
+    // document mints the blobs for its OWN frames, obtaining page text
+    // through a strict parent-chain relay: a document only ever SENDS to
+    // its direct parent (which, for every document the publisher's own
+    // runtime minted, is another publisher document) and only ACCEPTS
+    // text from that direct parent; requests from below are honored only
+    // for the document's own child frames, and the ROOT never sends
+    // upward at all. That last rule is load-bearing: the artifact host's
+    // frame-ancestors allows claude.ai (and friends) to frame an
+    // artifact, so window.top can be a FOREIGN document — a top-addressed
+    // protocol would hand page uuids to that ancestor and accept forged
+    // "page text" from it, minting attacker HTML as an artifact-origin
+    // blob document. The chain never touches the ancestor: requests stop
+    // at the root, replies are origin-addressed per hop (never '*' when
+    // an origin exists), and both directions are origin-gated (on https
+    // a foreign sender's origin can never equal this document's; in
+    // opaque contexts — file:// — everything serializes as 'null', where
+    // an embedded EXTERNAL frame still fails the gate by carrying its
+    // own real origin, and a sandboxed child of such a frame is excluded
+    // by the own-child-frames check plus uuid unguessability). Shape is
+    // deny-by-default: one request form, one reply form, no error
+    // replies.
+    // window.origin is the SERIALIZED SECURITY origin ('null' in opaque
+    // contexts such as a sandboxed preview iframe) — location.origin is
+    // computed from the URL and stays 'https://…' even when the document
+    // is sandboxed, which would misgate every opaque chain.
+    const OWN_TARGET = /^https?:[/][/]/.test(window.origin || '')
+      ? window.origin
+      : '*';
+    function trustedOrigin(e) {
+      if (e.origin === window.origin) return true; // https chains; opaque==opaque
+      // file:// trees: Chrome serializes the file document's origin as
+      // 'file://' while the blob: documents it mints serialize as 'null',
+      // so the two legitimate shapes can never string-match — accept the
+      // pair in both directions. https origins never serialize as either,
+      // and sender identity (own child frame / direct parent) is checked
+      // separately.
+      return (
+        (e.origin === 'null' &&
+          (window.origin === 'file://' ||
+            window.location.protocol === 'file:')) ||
+        (/^file:/.test(e.origin) && window.origin === 'null')
+      );
+    }
+    // Non-empty only in the root document (nested bundles ship an empty
+    // island), so it doubles as the root marker: the root answers from
+    // local text and treats a miss as authoritative — never relaying to
+    // its (possibly foreign) parent.
+    const isPageRoot = pageOrder.length > 0;
+    const blobUrls = {};
+    const resourceBlobs = {};
+    const UUID_SHAPE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+    const pendingFrames = {}; // uuid -> [{el, frag}] awaiting text for own frames
+    const pendingRelays = {}; // uuid -> [childWindow] awaiting text to pass down
+    function mountPage(el, frag, text) {
+      const pageBlob = new Blob([text], { type: 'text/html' });
+      const u = URL.createObjectURL(pageBlob);
+      resourceBlobs[u] = pageBlob;
+      el.src = u + frag;
+    }
+    function deliverPage(uuid, text) {
+      const frames = pendingFrames[uuid];
+      delete pendingFrames[uuid];
+      if (frames) for (const f of frames) mountPage(f.el, f.frag, text);
+      const relays = pendingRelays[uuid];
+      delete pendingRelays[uuid];
+      if (relays) {
+        for (const cw of relays) {
+          try { cw.postMessage({ __bundler_page: uuid, __bundler_text: text }, OWN_TARGET); } catch (err) { /* gone */ }
+        }
+      }
+    }
+    function ownFrameWindows() {
+      const out = [];
+      for (const f of Array.from(document.querySelectorAll('iframe'))) {
+        try { if (f.contentWindow) out.push(f.contentWindow); } catch (err) { /* detached */ }
+      }
+      return out;
+    }
+    window.addEventListener('message', function (e) {
+      const d = e.data;
+      if (!d || typeof d !== 'object' || !e.source) return;
+      // Origin gate first; the structural checks below (own-child-frames
+      // for requests, direct-parent + solicited-uuid for replies, the
+      // root's never-relay rule) are what hold in fully opaque chains
+      // where origin strings can't discriminate — a sandboxed root's
+      // FOREIGN wrapper still fails all three even though both serialize
+      // as real-vs-'null' rather than matching.
+      if (!trustedOrigin(e)) return;
+      if (typeof d.__bundler_need === 'string' && UUID_SHAPE.test(d.__bundler_need)) {
+        // Requests are honored only for this document's own child frames.
+        if (ownFrameWindows().indexOf(e.source) < 0) return;
+        const uuid = d.__bundler_need;
+        const text = pageTexts[uuid];
+        if (typeof text === 'string') {
+          try { e.source.postMessage({ __bundler_page: uuid, __bundler_text: text }, OWN_TARGET); } catch (err) { /* gone */ }
+          return;
+        }
+        if (isPageRoot || window.parent === window) return; // authoritative miss
+        const waiting = pendingRelays[uuid];
+        if (waiting) {
+          if (waiting.indexOf(e.source) < 0) waiting.push(e.source);
+          return;
+        }
+        // Never-answered uuids would otherwise accumulate forever under a
+        // request spray; past the cap (far above any real page count) new
+        // relays are dropped rather than remembered.
+        if (Object.keys(pendingRelays).length >= 128) return;
+        pendingRelays[uuid] = [e.source];
+        window.parent.postMessage({ __bundler_need: uuid }, OWN_TARGET);
+      } else if (
+        typeof d.__bundler_page === 'string' &&
+        UUID_SHAPE.test(d.__bundler_page) &&
+        typeof d.__bundler_text === 'string'
+      ) {
+        // The shape test is load-bearing beyond tidiness: the solicited
+        // check below uses the in operator, which matches prototype keys
+        // ('__proto__', 'constructor') — an unshaped key would reach
+        // deliverPage and throw, painting the error banner.
+        // Text is accepted only from the direct parent — the document
+        // that minted this one.
+        if (e.source !== window.parent || window.parent === window) return;
+        if (!(d.__bundler_page in pendingFrames) && !(d.__bundler_page in pendingRelays)) return;
+        deliverPage(d.__bundler_page, d.__bundler_text);
+      }
+    });
+
+    const uuids = Object.keys(manifest);
+    setStatus('Unpacking ' + uuids.length + ' assets...');
+
+    await Promise.all(uuids.map(async (uuid) => {
+      const entry = manifest[uuid];
+      try {
+        const binaryStr = atob(entry.data);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+
+        let finalBytes = bytes;
+        if (entry.compressed) {
+          if (typeof DecompressionStream !== 'undefined') {
+            const ds = new DecompressionStream('gzip');
+            const writer = ds.writable.getWriter();
+            const reader = ds.readable.getReader();
+            writer.write(bytes);
+            writer.close();
+            const chunks = [];
+            let totalLen = 0;
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              chunks.push(value);
+              totalLen += value.length;
+            }
+            finalBytes = new Uint8Array(totalLen);
+            let offset = 0;
+            for (const chunk of chunks) { finalBytes.set(chunk, offset); offset += chunk.length; }
+          } else {
+            console.warn('DecompressionStream not available, asset ' + uuid + ' may not render');
+          }
+        }
+
+        if (pageSet.has(uuid)) {
+          pageTexts[uuid] = new TextDecoder().decode(finalBytes);
+          return;
+        }
+        if (FONT_MIME.test(entry.mime) && MIME_TOKEN.test(entry.mime)) {
+          // Strict artifact hosts allow font-src data: but not blob:.
+          blobUrls[uuid] = 'data:' + entry.mime + ';base64,' +
+            (entry.compressed ? toBase64(finalBytes) : entry.data);
+        } else {
+          const blob = new Blob([finalBytes], { type: entry.mime });
+          blobUrls[uuid] = URL.createObjectURL(blob);
+          resourceBlobs[blobUrls[uuid]] = blob;
+        }
+      } catch (err) {
+        console.error('Failed to decode asset ' + uuid + ':', err);
+        const blob = new Blob([], { type: entry.mime });
+        blobUrls[uuid] = URL.createObjectURL(blob);
+        resourceBlobs[blobUrls[uuid]] = blob;
+      }
+    }));
+
+    const extResEl = document.querySelector('script[type="__bundler/ext_resources"]');
+    const extResources = extResEl ? JSON.parse(extResEl.textContent) : [];
+    const resourceMap = {};
+    for (const entry of extResources) {
+      if (blobUrls[entry.uuid]) resourceMap[entry.id] = blobUrls[entry.uuid];
+    }
+
+    // Artifact-host CSP (connect-src 'self') refuses fetch() of blob: URLs —
+    // consumers read these Blobs directly. Survives the swap like the error sink.
+    window.__resourceBlobs = resourceBlobs;
+
+    setStatus('Rendering...');
+    // Page uuids have no blob here — they ride inside about:blank#<uuid>
+    // frame markers the pass below resolves after the swap.
+    for (const uuid of uuids) {
+      if (pageSet.has(uuid)) continue;
+      template = template.split(uuid).join(blobUrls[uuid]);
+    }
+
+    // Strip integrity + crossorigin — blob URLs from a file:// document inherit
+    // a null origin, so crossorigin forces a CORS fetch that SRI then rejects.
+    // The manifest bytes are ours; SRI protects against CDN compromise, not this.
+    template = template.replace(/\s+integrity="[^"]*"/gi, '').replace(/\s+crossorigin="[^"]*"/gi, '');
+
+    const resourceScript = '<script>window.__resources = ' +
+      JSON.stringify(resourceMap).replace(/<\//g, '<\\/') +
+      ';</' + 'script>';
+    // Inject after <head> so the DOCTYPE stays first; prepending the script
+    // would push the parser into quirks mode. DOMParser always emits a <head>
+    // (synthesizing one if the source HTML omitted it) but may carry
+    // attributes through, so match the full opening tag. slice() rather than
+    // replace() keeps us clear of $-pattern substitution in resourceScript.
+    const headOpen = template.match(/<head[^>]*>/i);
+    if (headOpen) {
+      const i = headOpen.index + headOpen[0].length;
+      template = template.slice(0, i) + resourceScript + template.slice(i);
+    }
+
+    // Parse the template and swap the root element. Scripts inserted via
+    // DOMParser/replaceWith are inert per spec — re-create each with
+    // createElement so they execute, awaiting onload for src scripts to
+    // preserve ordering (React before ReactDOM before Babel before text/babel).
+    const doc = new DOMParser().parseFromString(template, 'text/html');
+    document.documentElement.replaceWith(doc.documentElement);
+
+    // Resolve page-frame markers: mint this document's own blob for each
+    // framed page — from local text when this is the root, otherwise by
+    // asking the direct parent over the relay protocol above. An
+    // unanswered request leaves the frame on about:blank, the same
+    // degraded state as a refused embed.
+    {
+      const MARKER = /^about:blank#([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(#.*)?$/;
+      const needed = [];
+      for (const el of Array.from(document.querySelectorAll('iframe'))) {
+        const m = MARKER.exec(el.getAttribute('src') || '');
+        if (!m) continue;
+        const text = pageTexts[m[1]];
+        if (typeof text === 'string') {
+          mountPage(el, m[2] || '', text);
+        } else if (window.parent !== window && !isPageRoot) {
+          const had = pendingFrames[m[1]];
+          (pendingFrames[m[1]] = had || []).push({ el: el, frag: m[2] || '' });
+          if (!had) needed.push(m[1]);
+        }
+      }
+      for (const uuid of needed) {
+        window.parent.postMessage({ __bundler_need: uuid }, OWN_TARGET);
+      }
+    }
+
+    const dead = Array.from(document.scripts);
+    for (const old of dead) {
+      const s = document.createElement('script');
+      for (const a of old.attributes) s.setAttribute(a.name, a.value);
+      s.textContent = old.textContent;
+      // text/babel scripts with a src: read and inline. transformScriptTags
+      // does XHR against the src, but blob:null/ from a file:// origin is
+      // silently dropped. Inlining makes it a plain inline babel script,
+      // which transformScriptTags handles unconditionally.
+      if ((s.type === 'text/babel' || s.type === 'text/jsx') && s.src) {
+        const pre = resourceBlobs[s.src.split('#')[0]];
+        s.textContent = pre ? await pre.text() : await (await fetch(s.src)).text();
+        s.removeAttribute('src');
+      }
+      const p = s.src ? new Promise(function(r) { s.onload = s.onerror = r; }) : null;
+      old.replaceWith(s);
+      if (p) await p;
+    }
+    // Babel standalone auto-transforms type=text/babel on DOMContentLoaded,
+    // which fired before we swapped the document. Trigger manually if present.
+    if (window.Babel && typeof window.Babel.transformScriptTags === 'function') {
+      window.Babel.transformScriptTags();
+    }
+  } catch (err) {
+    setStatus('Error unpacking: ' + err.message);
+    console.error('Bundle unpack error:', err);
+  }
+});
+
+  </script>
+
+  <script type="__bundler/manifest">
+{}
+  </script>
+
+  <script type="__bundler/ext_resources">
+[]
+  </script>
+
+  <script type="__bundler/page_order">
+[]
+  </script>
+
+  <script type="__bundler/template">
+"<!DOCTYPE html>\n<html lang=\"en\"><head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>EurasiaPulse — Politics and analysis across Central Asia and Eurasia<\u002Ftitle>\n\n<style>\n/* ---------- Design tokens ---------- */\n:root {\n  --color-bg: #FFFFFF;\n  --color-ink: #121212;\n  --color-ink-2: #5A5A5A;\n  --color-rule: #E2E2E2;\n  --color-accent: #B80000;\n  --color-img: #EDEDED;\n\n  --font-serif: \"Source Serif 4\", \"Source Serif Pro\", Georgia, \"Times New Roman\", serif;\n  --font-sans: Inter, -apple-system, \"Segoe UI\", Helvetica, Arial, sans-serif;\n\n  --container: 1240px;\n  --gutter: 24px;\n  --pad: 32px;\n\n  --space-1: 4px;\n  --space-2: 8px;\n  --space-3: 12px;\n  --space-4: 16px;\n  --space-5: 24px;\n  --space-6: 32px;\n  --space-7: 48px;\n  --space-8: 64px;\n\n  --text-xs: 11px;\n  --text-sm: 13px;\n  --text-md: 15px;\n  --text-lg: 19px;\n  --text-xl: 24px;\n  --text-2xl: 32px;\n  --text-3xl: 44px;\n}\n\n/* ---------- Base ---------- */\n*, *::before, *::after { box-sizing: border-box; }\nhtml { -webkit-text-size-adjust: 100%; }\nbody {\n  margin: 0;\n  background: var(--color-bg);\n  color: var(--color-ink);\n  font-family: var(--font-serif);\n  font-size: var(--text-md);\n  line-height: 1.5;\n  text-rendering: optimizeLegibility;\n}\na { color: inherit; text-decoration: none; }\na:hover { color: var(--color-accent); }\nh1, h2, h3, h4, p, ul, ol { margin: 0; }\nul, ol { padding: 0; list-style: none; }\n.container { max-width: var(--container); margin: 0 auto; padding: 0 var(--pad); }\n.grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--gutter); }\n.rule { border: 0; border-top: 1px solid var(--color-rule); margin: 0; }\n.sans { font-family: var(--font-sans); }\n\n/* ---------- Header ---------- */\n.topbar {\n  display: flex; justify-content: space-between; align-items: center;\n  font-family: var(--font-sans); font-size: var(--text-xs); color: var(--color-ink-2);\n  padding: var(--space-3) 0; border-bottom: 1px solid var(--color-rule);\n  letter-spacing: 0.02em;\n}\n.topbar-links { display: flex; gap: var(--space-4); }\n.masthead { text-align: center; padding: var(--space-6) 0 var(--space-5); }\n.masthead a {\n  font-family: var(--font-serif); font-weight: 600; font-size: 40px; letter-spacing: 0.18em;\n  text-transform: uppercase; line-height: 1;\n}\n.masthead a:hover { color: var(--color-ink); }\n.nav {\n  border-top: 1px solid var(--color-rule); border-bottom: 1px solid var(--color-rule);\n  font-family: var(--font-sans); font-size: var(--text-sm); font-weight: 500;\n}\n.nav-inner { display: flex; justify-content: center; align-items: center; gap: var(--space-6); position: relative; height: 44px; }\n.nav-inner a { letter-spacing: 0.01em; }\n.nav-search { position: absolute; right: 0; top: 0; height: 44px; display: flex; align-items: center; gap: 6px; color: var(--color-ink-2); }\n.nav-search svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.6; }\n.nav-toggle { display: none; position: absolute; left: 0; top: 0; height: 44px; align-items: center; gap: 8px; background: none; border: 0; padding: 0; font: inherit; color: var(--color-ink); cursor: pointer; }\n.nav-toggle span { display: block; width: 18px; height: 1.5px; background: currentColor; box-shadow: 0 5px 0 currentColor, 0 -5px 0 currentColor; }\n\n/* ---------- Editorial primitives ---------- */\n.kicker { font-family: var(--font-sans); font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-accent); }\n.meta { font-family: var(--font-sans); font-size: var(--text-xs); color: var(--color-ink-2); letter-spacing: 0.02em; }\n.meta .sep { margin: 0 6px; }\n.headline { font-family: var(--font-serif); font-weight: 600; line-height: 1.2; letter-spacing: -0.005em; text-wrap: pretty; }\n.headline a:hover { color: var(--color-accent); }\n.dek { color: var(--color-ink-2); line-height: 1.45; text-wrap: pretty; }\n.ph { background: var(--color-img); width: 100%; display: block; }\n.ph--169 { aspect-ratio: 16 / 9; }\n.ph--32 { aspect-ratio: 3 / 2; }\nfigure { margin: 0; }\nfigcaption { font-family: var(--font-sans); font-size: var(--text-xs); color: var(--color-ink-2); line-height: 1.45; margin-top: var(--space-2); }\nfigcaption .credit { text-transform: uppercase; letter-spacing: 0.06em; font-size: 10px; margin-left: 6px; }\n\n.section { padding: var(--space-7) 0; border-top: 1px solid var(--color-rule); }\n.section-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-5); }\n.section-title { font-family: var(--font-sans); font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }\n.section-more { font-family: var(--font-sans); font-size: var(--text-xs); color: var(--color-ink-2); }\n\n/* ---------- Card variants ----------\n   .card--lead      : large image, large headline, dek, kicker\n   .card--standard  : image, headline, dek, byline\n   .card--compact   : small image left, headline right (horizontal)\n   .card--text      : no image, headline + meta\n-------------------------------------- */\n.card { display: flex; flex-direction: column; gap: var(--space-3); }\n.card--lead .headline { font-size: var(--text-3xl); margin-top: var(--space-2); }\n.card--lead > figure { max-width: none; }\n.lead-hero { position: relative; display: block; overflow: hidden; }\n.lead-hero .ph { aspect-ratio: 16 / 9; background: #9A9A9A; }\n.lead-hero img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--color-img); }\n.lead-hero .overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--space-3); padding: var(--space-6); background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0) 75%); color: #FFFFFF; }\n.lead-hero .overlay .kicker { color: #FFFFFF; }\n.lead-hero .overlay .headline { color: #FFFFFF; font-size: var(--text-3xl); margin: 0; }\n.lead-hero .overlay .headline a:hover { color: #FFFFFF; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }\n.lead-sub { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: var(--space-4); margin-top: var(--space-5); padding-top: var(--space-5); border-top: 1px solid var(--color-rule); }\n.lead-sub .headline { font-size: 18px; }\n.lead-sub .ph { aspect-ratio: 2 / 1; }\n.card--lead .dek { font-size: var(--text-lg); }\n.card--standard .headline { font-size: var(--text-xl); }\n.card--standard .dek { font-size: var(--text-md); }\n.card--compact { flex-direction: row; gap: var(--space-4); align-items: flex-start; }\n.card--compact .ph { flex: 0 0 120px; width: 120px; }\n.card--compact .headline { font-size: 17px; }\n.card--text .headline { font-size: 18px; }\n\n/* Lead block */\n.lead { padding: var(--space-6) 0 var(--space-7); }\n.lead-main { grid-column: span 8; }\n.lead-side { grid-column: span 4; border-left: 1px solid var(--color-rule); padding-left: var(--gutter); }\n.lead-side li { padding: var(--space-4) 0; border-bottom: 1px solid var(--color-rule); }\n.lead-side li:first-child { padding-top: 0; }\n.lead-side li:last-child { border-bottom: 0; padding-bottom: 0; }\n.lead-side .card--compact .ph { flex: 0 0 96px; width: 96px; }\n.lead-side .card--compact .headline { font-size: 16px; }\n\n/* Latest */\n.latest ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); border-top: 1px solid var(--color-rule); }\n.latest li { display: grid; grid-template-columns: 56px 1fr 96px; column-gap: var(--space-4); padding: var(--space-4) 0; border-bottom: 1px solid var(--color-rule); align-items: start; }\n.latest .ph { width: 96px; }\n.latest time { font-family: var(--font-sans); font-size: var(--text-sm); font-variant-numeric: tabular-nums; color: var(--color-ink-2); padding-top: 3px; }\n.latest .headline { font-size: 17px; font-weight: 500; }\n.latest .meta { display: block; margin-top: 2px; }\n\n/* Analysis */\n.analysis .card { grid-column: span 4; }\n\n/* Category blocks */\n.cat .cat-lead { grid-column: span 6; }\n.cat .cat-list { grid-column: span 6; display: flex; flex-direction: column; }\n.cat .cat-list .card { padding: var(--space-4) 0; border-bottom: 1px solid var(--color-rule); }\n.cat .cat-list .card:first-child { padding-top: 0; }\n.cat .cat-list .card:last-child { border-bottom: 0; }\n.cat .card--standard .headline { font-size: 28px; }\n\n/* Region strip */\n.regions { border-top: 1px solid var(--color-rule); border-bottom: 1px solid var(--color-rule); padding: var(--space-4) 0; }\n.regions-inner { display: flex; align-items: center; gap: var(--space-5); font-family: var(--font-sans); font-size: var(--text-sm); overflow-x: auto; white-space: nowrap; }\n.regions-inner .section-title { flex: 0 0 auto; color: var(--color-ink-2); }\n\n/* Opinion */\n.opinion .card { grid-column: span 3; }\n.opinion .author { font-family: var(--font-sans); font-size: var(--text-sm); font-weight: 600; letter-spacing: 0.02em; }\n.opinion .headline { font-style: italic; font-weight: 400; font-size: 21px; }\n\n/* Footer */\n.footer { border-top: 1px solid var(--color-ink); margin-top: var(--space-7); padding: var(--space-7) 0 var(--space-6); font-family: var(--font-sans); font-size: var(--text-sm); }\n.footer-brand { font-family: var(--font-serif); font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; font-size: 18px; grid-column: span 3; }\n.footer-col { grid-column: span 3; }\n.footer-col h4 { font-size: var(--text-xs); letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-ink-2); margin-bottom: var(--space-3); font-weight: 600; }\n.footer-col li { padding: 3px 0; }\n.footer-bottom { border-top: 1px solid var(--color-rule); margin-top: var(--space-6); padding-top: var(--space-4); display: flex; justify-content: space-between; color: var(--color-ink-2); font-size: var(--text-xs); flex-wrap: wrap; gap: var(--space-3); }\n\n/* ---------- Mobile ---------- */\n@media (max-width: 767px) {\n  :root { --pad: 20px; --gutter: 20px; }\n  .topbar-links a:first-child { display: none; }\n  .masthead { padding: var(--space-5) 0 var(--space-4); }\n  .masthead a { font-size: 24px; }\n  .nav-inner { justify-content: center; gap: 0; }\n  .nav-inner > a { display: none; }\n  .nav-toggle { display: flex; }\n  .nav-search span { display: none; }\n  .grid { grid-template-columns: 1fr; }\n  .lead-main, .lead-side, .analysis .card, .cat .cat-lead, .cat .cat-list, .opinion .card, .footer-brand, .footer-col { grid-column: 1 / -1; }\n  .lead-side { border-left: 0; padding-left: 0; border-top: 1px solid var(--color-rule); padding-top: var(--space-4); }\n  .lead-sub { grid-template-columns: 1fr; row-gap: var(--space-5); }\n  .card--lead .headline { font-size: 30px; }\n  .lead-hero .overlay { padding: var(--space-4); }\n  .lead-hero .overlay .headline { font-size: 24px; }\n  .card--lead .dek { font-size: 17px; }\n  .cat .card--standard .headline { font-size: 24px; }\n  .cat .cat-list .card:first-child { padding-top: var(--space-4); border-top: 1px solid var(--color-rule); }\n  .latest ul { grid-template-columns: 1fr; }\n  .section { padding: var(--space-6) 0; }\n  .opinion .card { padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-rule); }\n  .opinion .card:last-child { border-bottom: 0; }\n  .footer-brand { margin-bottom: var(--space-2); }\n}\n<\u002Fstyle>\n<\u002Fhead>\n<body>\n\n<header class=\"container\">\n  <div class=\"topbar\">\n    <time datetime=\"2026-09-21\">Monday, September 21, 2026<\u002Ftime>\n    <nav class=\"topbar-links\"><a href=\"#\">About<\u002Fa><a href=\"#\">Newsletter<\u002Fa><\u002Fnav>\n  <\u002Fdiv>\n  <div class=\"masthead\"><a href=\"#\">EurasiaPulse<\u002Fa><\u002Fdiv>\n<\u002Fheader>\n\n<nav class=\"nav\">\n  <div class=\"container nav-inner\">\n    <button class=\"nav-toggle\" aria-label=\"Open menu\"><span><\u002Fspan><\u002Fbutton>\n    <a href=\"#\">Politics<\u002Fa><a href=\"#\">Economy<\u002Fa><a href=\"#\">Security<\u002Fa><a href=\"#\">Energy<\u002Fa><a href=\"#\">Diplomacy<\u002Fa><a href=\"#\">Analysis<\u002Fa><a href=\"#\">Opinion<\u002Fa>\n    <a class=\"nav-search\" href=\"#\" aria-label=\"Search\"><svg viewBox=\"0 0 16 16\"><circle cx=\"7\" cy=\"7\" r=\"5\"><\u002Fcircle><path d=\"M11 11l4 4\"><\u002Fpath><\u002Fsvg><span>Search<\u002Fspan><\u002Fa>\n  <\u002Fdiv>\n<\u002Fnav>\n\n<main class=\"container\">\n\n  <!-- Lead -->\n  <section class=\"lead grid\">\n    <article class=\"lead-main card card--lead\">\n      <figure>\n        <div class=\"lead-hero\">\n          <div class=\"ph ph--169\" role=\"img\" aria-label=\"Lead image placeholder\"><\u002Fdiv>\n          <div class=\"overlay\">\n            <span class=\"kicker\">Analysis<\u002Fspan>\n            <h2 class=\"headline\"><a href=\"#\">Regional leaders weigh new transit corridor as trade routes shift across the continent<\u002Fa><\u002Fh2>\n          <\u002Fdiv>\n        <\u002Fdiv>\n        <figcaption>Cargo terminals along the middle corridor are handling record volumes this quarter.<span class=\"credit\">Photo: EurasiaPulse<\u002Fspan><\u002Ffigcaption>\n      <\u002Ffigure>\n      <p class=\"dek\">Freight operators and ministries are reassessing east–west logistics after two years of rerouted flows. The choices made this autumn will shape investment for a decade.<\u002Fp>\n      <p class=\"meta\">By EurasiaPulse Analysis Desk<span class=\"sep\">·<\u002Fspan>8 min read<\u002Fp>\n      <div class=\"lead-sub\">\n        <article class=\"card card--standard\"><div class=\"ph ph--32\"><\u002Fdiv><h3 class=\"headline\"><a href=\"#\">Rail operators agree common documentation for through-traffic on secondary routes<\u002Fa><\u002Fh3><p class=\"meta\">Regional · Economy<\u002Fp><\u002Farticle>\n        <article class=\"card card--standard\"><div class=\"ph ph--32\"><\u002Fdiv><h3 class=\"headline\"><a href=\"#\">Ministers set date for next round of corridor consultations<\u002Fa><\u002Fh3><p class=\"meta\">Diplomacy<\u002Fp><\u002Farticle>\n      <\u002Fdiv>\n    <\u002Farticle>\n    <ul class=\"lead-side\">\n      <li class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Central bank holds key rate as inflation expectations stabilise ahead of budget season<\u002Fa><\u002Fh3><p class=\"meta\">Kazakhstan · Economy<\u002Fp><\u002Fdiv><\u002Fli>\n      <li class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Parliament opens debate on water-sharing framework with neighbouring states<\u002Fa><\u002Fh3><p class=\"meta\">Uzbekistan · Politics<\u002Fp><\u002Fdiv><\u002Fli>\n      <li class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Border commission resumes technical talks after six-month pause<\u002Fa><\u002Fh3><p class=\"meta\">Kyrgyzstan · Diplomacy<\u002Fp><\u002Fdiv><\u002Fli>\n      <li class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Grid operator outlines winter capacity plan as demand forecasts rise<\u002Fa><\u002Fh3><p class=\"meta\">Tajikistan · Energy<\u002Fp><\u002Fdiv><\u002Fli>\n      <li class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Gas export talks continue as buyers seek longer contract terms<\u002Fa><\u002Fh3><p class=\"meta\">Turkmenistan · Energy<\u002Fp><\u002Fdiv><\u002Fli>\n      <li class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Port authorities report steady growth in trans-Caspian container traffic<\u002Fa><\u002Fh3><p class=\"meta\">Caucasus · Economy<\u002Fp><\u002Fdiv><\u002Fli>\n      <li class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Regulators publish draft rules for cross-border payment systems<\u002Fa><\u002Fh3><p class=\"meta\">Russia · Economy<\u002Fp><\u002Fdiv><\u002Fli>\n      <li class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Trade delegation visit concludes with agreements on customs cooperation<\u002Fa><\u002Fh3><p class=\"meta\">China · Diplomacy<\u002Fp><\u002Fdiv><\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <!-- Latest -->\n  <section class=\"section latest\">\n    <div class=\"section-head\"><h2 class=\"section-title\">Latest<\u002Fh2><a class=\"section-more\" href=\"#\">All updates →<\u002Fa><\u002Fdiv>\n    <ul>\n      <li><time>09:42<\u002Ftime><div><h3 class=\"headline\"><a href=\"#\">Foreign ministers confirm dates for next regional consultative meeting<\u002Fa><\u002Fh3><span class=\"meta\">Diplomacy<\u002Fspan><\u002Fdiv><div class=\"ph ph--32\"><\u002Fdiv><\u002Fli>\n      <li><time>09:15<\u002Ftime><div><h3 class=\"headline\"><a href=\"#\">Customs authorities publish revised procedures for transit declarations<\u002Fa><\u002Fh3><span class=\"meta\">Economy · Kazakhstan<\u002Fspan><\u002Fdiv><div class=\"ph ph--32\"><\u002Fdiv><\u002Fli>\n      <li><time>08:50<\u002Ftime><div><h3 class=\"headline\"><a href=\"#\">Pipeline operator reports scheduled maintenance completed ahead of heating season, with throughput expected to return to contracted levels by the end of the week<\u002Fa><\u002Fh3><span class=\"meta\">Energy · Turkmenistan<\u002Fspan><\u002Fdiv><div class=\"ph ph--32\"><\u002Fdiv><\u002Fli>\n      <li><time>08:20<\u002Ftime><div><h3 class=\"headline\"><a href=\"#\">Election commission releases timetable for municipal vote<\u002Fa><\u002Fh3><span class=\"meta\">Politics · Kyrgyzstan<\u002Fspan><\u002Fdiv><div class=\"ph ph--32\"><\u002Fdiv><\u002Fli>\n      <li><time>07:55<\u002Ftime><div><h3 class=\"headline\"><a href=\"#\">Statistics agency revises second-quarter growth estimate<\u002Fa><\u002Fh3><span class=\"meta\">Economy · Uzbekistan<\u002Fspan><\u002Fdiv><div class=\"ph ph--32\"><\u002Fdiv><\u002Fli>\n      <li><time>07:30<\u002Ftime><div><h3 class=\"headline\"><a href=\"#\">Central bank publishes minutes from latest monetary policy meeting<\u002Fa><\u002Fh3><span class=\"meta\">Economy · Kazakhstan<\u002Fspan><\u002Fdiv><div class=\"ph ph--32\"><\u002Fdiv><\u002Fli>\n    <\u002Ful>\n  <\u002Fsection>\n\n  <!-- Analysis -->\n  <section class=\"section analysis\">\n    <div class=\"section-head\"><h2 class=\"section-title\">Analysis<\u002Fh2><a class=\"section-more\" href=\"#\">More analysis →<\u002Fa><\u002Fdiv>\n    <div class=\"grid\">\n      <article class=\"card card--standard\">\n        <figure><div class=\"ph ph--32\"><\u002Fdiv><figcaption>Placeholder image, 3:2.<span class=\"credit\">Photo: Agency<\u002Fspan><\u002Ffigcaption><\u002Ffigure>\n        <span class=\"kicker\">Analysis<\u002Fspan>\n        <h3 class=\"headline\"><a href=\"#\">What a shift in regional lending priorities means for infrastructure pipelines<\u002Fa><\u002Fh3>\n        <p class=\"dek\">Development banks are rebalancing portfolios. The effects will be uneven across the region.<\u002Fp>\n        <p class=\"meta\">By Staff Writer<\u002Fp>\n      <\u002Farticle>\n      <article class=\"card card--standard\">\n        <figure><div class=\"ph ph--32\"><\u002Fdiv><figcaption>Placeholder image, 3:2.<span class=\"credit\">Photo: Agency<\u002Fspan><\u002Ffigcaption><\u002Ffigure>\n        <span class=\"kicker\">Explainer<\u002Fspan>\n        <h3 class=\"headline\"><a href=\"#\">How cross-border electricity trading actually works in Central Asia<\u002Fa><\u002Fh3>\n        <p class=\"dek\">A guide to the grid, the contracts and the constraints behind seasonal power swaps.<\u002Fp>\n        <p class=\"meta\">By EurasiaPulse Analysis Desk<\u002Fp>\n      <\u002Farticle>\n      <article class=\"card card--standard\">\n        <figure><div class=\"ph ph--32\"><\u002Fdiv><figcaption>Placeholder image, 3:2.<span class=\"credit\">Photo: Agency<\u002Fspan><\u002Ffigcaption><\u002Ffigure>\n        <span class=\"kicker\">Analysis<\u002Fspan>\n        <h3 class=\"headline\"><a href=\"#\">Reading the new investment code: continuity, with a few important changes<\u002Fa><\u002Fh3>\n        <p class=\"dek\">The revised text keeps the existing architecture but adjusts dispute and repatriation rules.<\u002Fp>\n        <p class=\"meta\">By Staff Writer<\u002Fp>\n      <\u002Farticle>\n    <\u002Fdiv>\n  <\u002Fsection>\n\n  <!-- Politics -->\n  <section class=\"section cat\">\n    <div class=\"section-head\"><h2 class=\"section-title\">Politics<\u002Fh2><a class=\"section-more\" href=\"#\">All politics →<\u002Fa><\u002Fdiv>\n    <div class=\"grid\">\n      <article class=\"cat-lead card card--standard\">\n        <figure><div class=\"ph ph--169\"><\u002Fdiv><figcaption>Placeholder image, 16:9.<span class=\"credit\">Photo: Agency<\u002Fspan><\u002Ffigcaption><\u002Ffigure>\n        <h3 class=\"headline\"><a href=\"#\">Coalition talks enter second week as parties trade proposals on committee posts<\u002Fa><\u002Fh3>\n        <p class=\"dek\">Negotiators say a framework agreement is close, but the allocation of oversight roles remains unresolved.<\u002Fp>\n        <p class=\"meta\">By Staff Writer<span class=\"sep\">·<\u002Fspan>Politics<\u002Fp>\n      <\u002Farticle>\n      <div class=\"cat-list\">\n        <article class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Regional governors meet to coordinate on public-sector wage timetable<\u002Fa><\u002Fh3><p class=\"meta\">Kazakhstan<\u002Fp><\u002Fdiv><\u002Farticle>\n        <article class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Draft law on local self-government published for public comment<\u002Fa><\u002Fh3><p class=\"meta\">Uzbekistan<\u002Fp><\u002Fdiv><\u002Farticle>\n        <article class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Ombudsman's annual report flags backlog in administrative appeals<\u002Fa><\u002Fh3><p class=\"meta\">Kyrgyzstan<\u002Fp><\u002Fdiv><\u002Farticle>\n        <article class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Constitutional court schedules hearing on electoral threshold challenge<\u002Fa><\u002Fh3><p class=\"meta\">Tajikistan<\u002Fp><\u002Fdiv><\u002Farticle>\n      <\u002Fdiv>\n    <\u002Fdiv>\n  <\u002Fsection>\n\n  <!-- Economy -->\n  <section class=\"section cat\">\n    <div class=\"section-head\"><h2 class=\"section-title\">Economy<\u002Fh2><a class=\"section-more\" href=\"#\">All economy →<\u002Fa><\u002Fdiv>\n    <div class=\"grid\">\n      <article class=\"cat-lead card card--standard\">\n        <figure><div class=\"ph ph--169\"><\u002Fdiv><figcaption>Placeholder image, 16:9.<span class=\"credit\">Photo: Agency<\u002Fspan><\u002Ffigcaption><\u002Ffigure>\n        <h3 class=\"headline\"><a href=\"#\">Exporters adjust to new currency rules as regulators tighten repatriation windows<\u002Fa><\u002Fh3>\n        <p class=\"dek\">Firms in metals and agriculture report longer settlement cycles and higher hedging costs.<\u002Fp>\n        <p class=\"meta\">By Staff Writer<span class=\"sep\">·<\u002Fspan>Economy<\u002Fp>\n      <\u002Farticle>\n      <div class=\"cat-list\">\n        <article class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Rail operators agree tariff corridor for container traffic through 2027<\u002Fa><\u002Fh3><p class=\"meta\">Regional<\u002Fp><\u002Fdiv><\u002Farticle>\n        <article class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Wheat harvest forecast trimmed after dry summer in northern provinces<\u002Fa><\u002Fh3><p class=\"meta\">Kazakhstan<\u002Fp><\u002Fdiv><\u002Farticle>\n        <article class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Ministry publishes tender schedule for regional road network<\u002Fa><\u002Fh3><p class=\"meta\">Tajikistan<\u002Fp><\u002Fdiv><\u002Farticle>\n        <article class=\"card card--compact\"><div class=\"ph ph--32\"><\u002Fdiv><div><h3 class=\"headline\"><a href=\"#\">Sovereign fund reports annual results and updates allocation targets<\u002Fa><\u002Fh3><p class=\"meta\">Kazakhstan<\u002Fp><\u002Fdiv><\u002Farticle>\n      <\u002Fdiv>\n    <\u002Fdiv>\n  <\u002Fsection>\n<\u002Fmain>\n\n<!-- By Region -->\n<section class=\"regions\">\n  <div class=\"container regions-inner\">\n    <span class=\"section-title\">By Region<\u002Fspan>\n    <a href=\"#\">Kazakhstan<\u002Fa><a href=\"#\">Uzbekistan<\u002Fa><a href=\"#\">Kyrgyzstan<\u002Fa><a href=\"#\">Tajikistan<\u002Fa><a href=\"#\">Turkmenistan<\u002Fa><a href=\"#\">Caucasus<\u002Fa><a href=\"#\">Russia<\u002Fa><a href=\"#\">China<\u002Fa>\n  <\u002Fdiv>\n<\u002Fsection>\n\n<main class=\"container\">\n  <!-- Opinion -->\n  <section class=\"section opinion\" style=\"border-top:0\">\n    <div class=\"section-head\"><h2 class=\"section-title\">Opinion<\u002Fh2><a class=\"section-more\" href=\"#\">All opinion →<\u002Fa><\u002Fdiv>\n    <div class=\"grid\">\n      <article class=\"card\"><p class=\"author\">Guest Columnist<\u002Fp><h3 class=\"headline\"><a href=\"#\">The corridor debate is about institutions, not kilometres<\u002Fa><\u002Fh3><\u002Farticle>\n      <article class=\"card\"><p class=\"author\">Contributing Editor<\u002Fp><h3 class=\"headline\"><a href=\"#\">Why water diplomacy needs a longer time horizon than election cycles<\u002Fa><\u002Fh3><\u002Farticle>\n      <article class=\"card\"><p class=\"author\">Guest Columnist<\u002Fp><h3 class=\"headline\"><a href=\"#\">Energy transition plans should start with the grid, not the generation mix<\u002Fa><\u002Fh3><\u002Farticle>\n      <article class=\"card\"><p class=\"author\">EurasiaPulse Editorial Board<\u002Fp><h3 class=\"headline\"><a href=\"#\">Regional statistics deserve the same scrutiny as regional politics<\u002Fa><\u002Fh3><\u002Farticle>\n    <\u002Fdiv>\n  <\u002Fsection>\n<\u002Fmain>\n\n<footer class=\"footer\">\n  <div class=\"container\">\n    <div class=\"grid\">\n      <div class=\"footer-brand\">EurasiaPulse<\u002Fdiv>\n      <div class=\"footer-col\"><h4>Sections<\u002Fh4><ul><li><a href=\"#\">Politics<\u002Fa><\u002Fli><li><a href=\"#\">Economy<\u002Fa><\u002Fli><li><a href=\"#\">Security<\u002Fa><\u002Fli><li><a href=\"#\">Energy<\u002Fa><\u002Fli><li><a href=\"#\">Diplomacy<\u002Fa><\u002Fli><li><a href=\"#\">Analysis<\u002Fa><\u002Fli><li><a href=\"#\">Opinion<\u002Fa><\u002Fli><\u002Ful><\u002Fdiv>\n      <div class=\"footer-col\"><h4>Regions<\u002Fh4><ul><li><a href=\"#\">Kazakhstan<\u002Fa><\u002Fli><li><a href=\"#\">Uzbekistan<\u002Fa><\u002Fli><li><a href=\"#\">Kyrgyzstan<\u002Fa><\u002Fli><li><a href=\"#\">Tajikistan<\u002Fa><\u002Fli><li><a href=\"#\">Turkmenistan<\u002Fa><\u002Fli><li><a href=\"#\">Caucasus<\u002Fa><\u002Fli><li><a href=\"#\">Russia<\u002Fa><\u002Fli><li><a href=\"#\">China<\u002Fa><\u002Fli><\u002Ful><\u002Fdiv>\n      <div class=\"footer-col\"><h4>Company<\u002Fh4><ul><li><a href=\"#\">About<\u002Fa><\u002Fli><li><a href=\"#\">Methodology<\u002Fa><\u002Fli><li><a href=\"#\">Editorial Standards<\u002Fa><\u002Fli><li><a href=\"#\">Contact<\u002Fa><\u002Fli><li><a href=\"#\">Privacy<\u002Fa><\u002Fli><\u002Ful><\u002Fdiv>\n    <\u002Fdiv>\n    <div class=\"footer-bottom\"><span>© 2026 EurasiaPulse. All rights reserved.<\u002Fspan><span>Independent reporting and analysis on Central Asia and Eurasia.<\u002Fspan><\u002Fdiv>\n  <\u002Fdiv>\n<\u002Ffooter>\n\n\n\n<\u002Fbody><\u002Fhtml>"
+  </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+/*
+Theme Name: EurasiaPulse
+Theme URI: https://eurasiapulse.com/
+Author: EurasiaPulse
+Author URI: https://eurasiapulse.com/
+Description: A lightweight, classic editorial theme for EurasiaPulse - politics and analysis across Central Asia and Eurasia. Typography-led hierarchy, hairline rules, one accent colour, no build step, no plugin dependencies. Designed for REST-driven publishing (region/format taxonomies and article meta are exposed to the WordPress REST API).
+Version: 1.0.0
+Requires at least: 6.5
+Tested up to: 7.1
+Requires PHP: 8.1
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: eurasiapulse
+Tags: news, one-column, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready, editor-style, block-styles
+
+EurasiaPulse WordPress theme. All CSS lives in assets/css/main.css; this file
+only carries the theme header. Bundled fonts (Inter, Source Serif 4) are
+licensed under the SIL Open Font License 1.1 - see assets/fonts/.
+*/
