@@ -83,7 +83,17 @@ Targets (Performance ≥ 90, Accessibility ≥ 95, SEO 100) met. Remaining perfo
 7. **Placeholder JPEGs** in the local site are GD-generated grey images; Lighthouse's image-optimisation hint refers to them, not to theme code.
 8. **`front-page.php` ignores a static front page's content** by design; if a static homepage is ever wanted, that decision should be revisited.
 
-## 6. How to run locally (Windows, no Docker)
+## 6. Version 1.1.0 — after the first live test on eurasiapulse.com
+
+**Bug found on the live site (WordPress 6.9.8):** every link was black and underlined, including the lead headline over the image. Cause: on WP 6.x a classic theme with separate block assets gets the theme.json "global styles" printed in the *footer*, after `main.css`, and core's `a:where(...)` rules (ink colour, underline) won. WP 7.1.1, used for the first round of testing, prints the same block in the head, where the theme stylesheet overrides it — so the bug was invisible locally. Fix: global styles removed from the front end on both hooks, theme-defined preset variables, and link rules with higher specificity (`.site-main a` etc.). Reproduced and verified on a second local instance running WordPress 6.9.8 (`.local/wp69`, port 8081, screenshots in the run log) and re-verified on 7.1.1.
+
+**New in 1.1.0 (requested after the live test):** language switcher (Polylang / WPML / manual list), social icons in the top bar, light/dark mode switch with system preference, footer page-link row, navigation fallbacks limited to categories that hold posts, and a GitHub-based self-updater with automatic installation plus a release workflow (`.github/workflows/release.yml`). Details in DECISIONS.md §35–42 and `eurasiapulse/readme.txt`.
+
+**Verification, 1.1.0:** `php -l` clean (38 files); `node --check` clean; WP_DEBUG log empty on 7.1.1 and 6.9.8 for the front end and on 7.1.1 for wp-admin; REST test unchanged (15/15); 36 screenshots regenerated with no horizontal overflow; Lighthouse mobile home / article / category: performance 95 / 98 / 98, accessibility 100 / 100 / 100, best practices 100, SEO 100; `main.css` 35.2 KB raw / 6.9 KB gzip, `main.js` 3.9 KB raw / 1.4 KB gzip.
+
+**Deployment note:** the copy installed on eurasiapulse.com is 1.0.0 and has no updater. Install 1.1.0 once by uploading `eurasiapulse.zip` (or the GitHub release asset) over it; from then on new releases (tag `vX.Y.Z` on GitHub) are picked up and installed automatically.
+
+## 7. How to run locally (Windows, no Docker)
 
 ```
 powershell -File dev/serve.ps1          # http://127.0.0.1:8080  (admin / admin-local-password)

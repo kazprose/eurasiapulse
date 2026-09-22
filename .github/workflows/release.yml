@@ -1,0 +1,49 @@
+name: Release theme zip
+
+# Push a tag like v1.2.0 (matching "Version: 1.2.0" in eurasiapulse/style.css)
+# and this workflow builds eurasiapulse.zip and publishes a GitHub Release.
+# The theme's built-in updater (inc/updater.php) picks that release up and
+# WordPress installs it (automatically, if enabled in the Customizer).
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check that style.css Version matches the tag
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          VER="$(grep -m1 -E '^Version:' eurasiapulse/style.css | awk '{print $2}' | tr -d '\r')"
+          echo "tag=$TAG version=$VER"
+          if [ "$TAG" != "$VER" ]; then
+            echo "::error::eurasiapulse/style.css says Version $VER but the tag is $TAG"
+            exit 1
+          fi
+
+      - name: PHP syntax check
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq php-cli >/dev/null
+          find eurasiapulse -name '*.php' -print0 | xargs -0 -n1 php -l >/dev/null
+
+      - name: Build eurasiapulse.zip
+        run: |
+          rm -f eurasiapulse.zip
+          zip -r -q eurasiapulse.zip eurasiapulse -x '*.DS_Store' 'eurasiapulse/screenshot-*.png'
+          unzip -l eurasiapulse.zip | tail -1
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" eurasiapulse.zip \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes

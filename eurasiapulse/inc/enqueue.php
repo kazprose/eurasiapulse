@@ -73,10 +73,33 @@ function eurasiapulse_preload_fonts() {
 add_action( 'wp_head', 'eurasiapulse_preload_fonts', 1 );
 
 /**
- * Swap the "no-js" class before first paint so CSS can rely on it.
- * Inline on purpose: it has to run before the stylesheet applies.
+ * Keep theme.json "global styles" off the front end.
+ *
+ * Core prints them in the head on WordPress 7.x but in the footer on 6.x
+ * (classic theme with separate block assets). In the footer they load after
+ * main.css and restyle every link (colour, underline). The theme ships its own
+ * preset classes and CSS variables instead. The editor is unaffected.
+ */
+function eurasiapulse_disable_global_styles() {
+	if ( is_admin() ) {
+		return;
+	}
+	remove_action( 'wp_enqueue_scripts', 'wp_enqueue_global_styles' );
+	remove_action( 'wp_footer', 'wp_enqueue_global_styles', 1 );
+}
+add_action( 'init', 'eurasiapulse_disable_global_styles' );
+
+/**
+ * Pre-paint inline script: swap the "no-js" class and apply the visitor's
+ * stored light/dark choice before the stylesheet applies (no flash).
  */
 function eurasiapulse_js_class_script() {
-	echo "<script>document.documentElement.className=document.documentElement.className.replace('no-js','js');</script>\n";
+	$script = "document.documentElement.className=document.documentElement.className.replace('no-js','js');";
+	if ( eurasiapulse_mod( 'dark_mode_toggle' ) ) {
+		$script .= "try{var t=localStorage.getItem('eurasiapulse-theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t)}}catch(e){}";
+	}
+	$scheme = eurasiapulse_mod( 'dark_mode_auto' ) ? 'light dark' : 'light';
+	echo '<meta name="color-scheme" content="' . esc_attr( $scheme ) . '">' . "\n";
+	echo '<script>' . $script . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static script, no user input.
 }
 add_action( 'wp_head', 'eurasiapulse_js_class_script', 0 );

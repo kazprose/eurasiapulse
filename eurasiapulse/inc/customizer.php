@@ -17,8 +17,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 function eurasiapulse_defaults() {
 	return array(
 		// Header.
-		'topbar_show_date'    => true,
-		'newsletter_url'      => '',
+		'topbar_show_date'      => true,
+		'newsletter_url'        => '',
+		'topbar_show_languages' => true,
+		'language_links'        => '',
+		'topbar_show_social'    => true,
+		'dark_mode_toggle'      => true,
+		'dark_mode_auto'        => true,
+		// Updates.
+		'github_repo'           => 'kazprose/eurasiapulse',
+		'github_auto_update'    => true,
 		// Homepage.
 		'lead_style'          => 'overlay',
 		'lead_source'         => 'sticky',
@@ -48,6 +56,7 @@ function eurasiapulse_defaults() {
 		'footer_tagline'      => '',
 		'social_x'            => '',
 		'social_telegram'     => '',
+		'social_instagram'    => '',
 		'social_linkedin'     => '',
 		'social_facebook'     => '',
 		'social_youtube'      => '',
@@ -222,6 +231,7 @@ function eurasiapulse_customize_register( $wp_customize ) {
 		'eurasiapulse_article' => __( 'Article page', 'eurasiapulse' ),
 		'eurasiapulse_footer'  => __( 'Footer & social', 'eurasiapulse' ),
 		'eurasiapulse_seo'     => __( 'Structured data', 'eurasiapulse' ),
+		'eurasiapulse_updates' => __( 'Updates (GitHub)', 'eurasiapulse' ),
 	);
 	foreach ( $sections as $id => $title ) {
 		$wp_customize->add_section(
@@ -278,6 +288,55 @@ function eurasiapulse_customize_register( $wp_customize ) {
 			'description' => __( 'Shown in the top bar when no "Top bar links" menu is assigned.', 'eurasiapulse' ),
 		),
 		'eurasiapulse_sanitize_url'
+	);
+	$add(
+		'topbar_show_languages',
+		'eurasiapulse_header',
+		array(
+			'type'        => 'checkbox',
+			'label'       => __( 'Show the language switcher', 'eurasiapulse' ),
+			'description' => __( 'Languages come from Polylang or WPML automatically; otherwise from the list below.', 'eurasiapulse' ),
+		),
+		'eurasiapulse_sanitize_checkbox'
+	);
+	$add(
+		'language_links',
+		'eurasiapulse_header',
+		array(
+			'type'        => 'textarea',
+			'label'       => __( 'Language links (fallback)', 'eurasiapulse' ),
+			'description' => __( 'One per line as "Label|URL", e.g. "KK|https://example.com/kk/". Used only when no multilingual plugin is active.', 'eurasiapulse' ),
+		),
+		'sanitize_textarea_field'
+	);
+	$add(
+		'topbar_show_social',
+		'eurasiapulse_header',
+		array(
+			'type'        => 'checkbox',
+			'label'       => __( 'Show social icons in the top bar', 'eurasiapulse' ),
+			'description' => __( 'Profile URLs are set under "Footer & social".', 'eurasiapulse' ),
+		),
+		'eurasiapulse_sanitize_checkbox'
+	);
+	$add(
+		'dark_mode_toggle',
+		'eurasiapulse_header',
+		array(
+			'type'  => 'checkbox',
+			'label' => __( 'Show the light / dark mode switch', 'eurasiapulse' ),
+		),
+		'eurasiapulse_sanitize_checkbox'
+	);
+	$add(
+		'dark_mode_auto',
+		'eurasiapulse_header',
+		array(
+			'type'        => 'checkbox',
+			'label'       => __( 'Follow the visitor\'s system dark mode by default', 'eurasiapulse' ),
+			'description' => __( 'An explicit choice made with the switch always wins.', 'eurasiapulse' ),
+		),
+		'eurasiapulse_sanitize_checkbox'
 	);
 
 	// Homepage.
@@ -512,6 +571,7 @@ function eurasiapulse_customize_register( $wp_customize ) {
 	$socials = array(
 		'social_x'        => __( 'X (Twitter) profile URL', 'eurasiapulse' ),
 		'social_telegram' => __( 'Telegram channel URL', 'eurasiapulse' ),
+		'social_instagram' => __( 'Instagram profile URL', 'eurasiapulse' ),
 		'social_linkedin' => __( 'LinkedIn page URL', 'eurasiapulse' ),
 		'social_facebook' => __( 'Facebook page URL', 'eurasiapulse' ),
 		'social_youtube'  => __( 'YouTube channel URL', 'eurasiapulse' ),
@@ -568,5 +628,49 @@ function eurasiapulse_customize_register( $wp_customize ) {
 		),
 		'eurasiapulse_sanitize_url_list'
 	);
+
+	// Updates from GitHub.
+	$add(
+		'github_repo',
+		'eurasiapulse_updates',
+		array(
+			'type'        => 'text',
+			'label'       => __( 'GitHub repository (owner/name)', 'eurasiapulse' ),
+			'description' => __( 'The theme checks this repository\'s latest release and offers it under Dashboard > Updates. Each release needs an eurasiapulse.zip asset (built by the bundled GitHub Actions workflow). Can also be set with the EURASIAPULSE_GITHUB_REPO constant.', 'eurasiapulse' ),
+		),
+		'eurasiapulse_sanitize_repo'
+	);
+	$add(
+		'github_auto_update',
+		'eurasiapulse_updates',
+		array(
+			'type'        => 'checkbox',
+			'label'       => __( 'Install new releases automatically', 'eurasiapulse' ),
+			'description' => __( 'Uses WordPress auto-updates (checked twice a day).', 'eurasiapulse' ),
+		),
+		'eurasiapulse_sanitize_checkbox'
+	);
 }
 add_action( 'customize_register', 'eurasiapulse_customize_register' );
+
+/**
+ * Sanitize a GitHub "owner/name" repository slug.
+ *
+ * @param mixed $value Raw value.
+ * @return string
+ */
+function eurasiapulse_sanitize_repo( $value ) {
+	$value = trim( (string) $value, "/ \t\n\r" );
+	$value = preg_replace( '#^https?://github\.com/#i', '', $value );
+	return preg_match( '#^[\w.-]+/[\w.-]+$#', $value ) ? $value : '';
+}
+
+/**
+ * Forget the cached GitHub release when Customizer settings are saved.
+ */
+function eurasiapulse_customize_saved() {
+	if ( function_exists( 'eurasiapulse_flush_release_cache' ) ) {
+		eurasiapulse_flush_release_cache();
+	}
+}
+add_action( 'customize_save_after', 'eurasiapulse_customize_saved' );

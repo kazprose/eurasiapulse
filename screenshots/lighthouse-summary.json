@@ -12,8 +12,6 @@
       "first-contentful-paint (0.85)",
       "largest-contentful-paint (0.88)",
       "speed-index (0.99)",
-      "max-potential-fid (0.99)",
-      "server-response-time (0)",
       "interactive (0.98)",
       "largest-contentful-paint-element (0)",
       "uses-long-cache-ttl (0.5)",
@@ -23,13 +21,13 @@
       "uses-optimized-images (0.5)",
       "uses-text-compression (0)",
       "cache-insight (0)",
-      "document-latency-insight (0)",
+      "document-latency-insight (0.5)",
       "network-dependency-tree-insight (0)",
       "render-blocking-insight (0)"
     ],
     "lcp": "2.6 s",
     "cls": "0",
-    "tbt": "10 ms"
+    "tbt": "0 ms"
   },
   {
     "name": "article",
@@ -41,19 +39,17 @@
       "seo": 100
     },
     "failing": [
-      "first-contentful-paint (0.93)",
+      "first-contentful-paint (0.96)",
       "largest-contentful-paint (0.94)",
-      "speed-index (0.99)",
-      "server-response-time (0)",
       "interactive (0.99)",
       "uses-long-cache-ttl (0.5)",
       "render-blocking-resources (0)",
-      "unminified-css (0)",
+      "unminified-css (0.5)",
       "unused-css-rules (0)",
       "uses-optimized-images (0.5)",
       "uses-text-compression (0)",
       "cache-insight (0)",
-      "document-latency-insight (0)",
+      "document-latency-insight (0.5)",
       "network-dependency-tree-insight (0)",
       "render-blocking-insight (0)"
     ],
@@ -65,19 +61,19 @@
     "name": "category",
     "url": "http://127.0.0.1:8080/category/politics/",
     "scores": {
-      "performance": 99,
+      "performance": 98,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100
     },
     "failing": [
-      "first-contentful-paint (0.97)",
-      "largest-contentful-paint (0.96)",
+      "first-contentful-paint (0.96)",
+      "largest-contentful-paint (0.93)",
       "interactive (0.99)",
       "uses-long-cache-ttl (0.5)",
-      "render-blocking-resources (0)",
+      "render-blocking-resources (0.5)",
       "unminified-css (0.5)",
-      "unused-css-rules (0.5)",
+      "unused-css-rules (0)",
       "uses-optimized-images (0.5)",
       "uses-text-compression (0)",
       "cache-insight (0)",
@@ -85,7 +81,7 @@
       "network-dependency-tree-insight (0)",
       "render-blocking-insight (0)"
     ],
-    "lcp": "2.1 s",
+    "lcp": "2.3 s",
     "cls": "0",
     "tbt": "0 ms"
   }

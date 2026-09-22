@@ -85,3 +85,21 @@ Assumptions and judgement calls made while building the theme, in the order they
 ## Naming
 
 34. **PHP prefix is `eurasiapulse_`** for functions, hooks and Customizer settings (theme-check requires a distinctive prefix); meta keys keep the requested `ep_` prefix; CSS classes are unprefixed BEM-ish (`.card--compact`, `.lead__side`).
+
+## Version 1.1.0 (after the first live test on eurasiapulse.com, WordPress 6.9.8)
+
+35. **The black, underlined lead headline was WordPress 6.x, not the CSS.** For a classic theme with separate block assets, WP 6.x prints theme.json "global styles" in the *footer* (WP 7.1, used locally, prints them in the head), so core's `a:where(:not(.wp-element-button)) { color; text-decoration: underline }` landed after `main.css` and won. Fix: `wp_enqueue_global_styles` is removed from both `wp_enqueue_scripts` and `wp_footer` (front end only) and the theme defines the `--wp--preset--*` variables itself; link rules use `.site-header a, .site-main a, .site-footer a` so a page-builder "kit" stylesheet cannot repaint them either. Verified on a second local instance running WordPress 6.9.8 (`.local/wp69`, port 8081).
+
+36. **Language switcher** reads Polylang (`pll_the_languages`) or WPML (`wpml_active_languages`) and falls back to a Customizer "Label|URL" list; it is hidden with fewer than two languages. Codes are shown uppercase (RU KK UZ KY ZH), full names in `title`, `hreflang`/`lang` attributes set. Filter: `eurasiapulse_language_items`.
+
+37. **Social icons are inline stroke SVGs drawn in the theme** (no icon font, no third-party assets), shown in the top bar; the footer keeps text links. Instagram was added to the profile settings.
+
+38. **Dark mode**: explicit choice stored in `localStorage` (`eurasiapulse-theme`) and applied before paint by an inline script; "follow the system" is on by default (`data-theme-auto` on `<html>`, `prefers-color-scheme`). Dark palette: #121212 / #f2f2f2 / #a8a8a8 / #2c2c2c, accent #ff6b6b (7.6:1 on the dark background). Photos and the lead scrim are unchanged.
+
+39. **Footer bottom row** = menu location "Footer: bottom row" or, by default, top-level pages not already listed in the Company column (up to 8), so a site whose pages have Russian slugs still gets its page links.
+
+40. **Navigation fallbacks use only categories with posts** (preferred slugs first, then most-used top-level categories of the current language). The English default categories created on activation therefore no longer appear in the menu on a site that does not use them.
+
+41. **Self-updates come from GitHub Releases** (`inc/updater.php`): latest release via the API, cached 6 h, injected into `update_themes`; `upgrader_source_selection` keeps the folder name `eurasiapulse`; auto-install is on by default; `Update URI` points at the repository so wordpress.org never offers a same-slug theme. Default repository: `kazprose/eurasiapulse`. Sites running 1.0.0 have no updater yet and must install 1.1.0 once by hand.
+
+42. **Release automation** lives in `.github/workflows/release.yml`: a `v*` tag must equal the `Version` header, PHP is linted, `eurasiapulse.zip` is built from the `eurasiapulse/` folder and attached to a GitHub Release with generated notes.

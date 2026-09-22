@@ -1,6 +1,7 @@
 <?php
 /**
- * Header: skip link, top bar, masthead, sticky primary navigation, search.
+ * Header: skip link, top bar (date, links, languages, social, dark mode),
+ * masthead, sticky primary navigation, search.
  *
  * @package EurasiaPulse
  */
@@ -8,7 +9,7 @@
 $eurasiapulse_logo_tag = ( is_front_page() && ! is_paged() ) ? 'h1' : 'p';
 ?>
 <!DOCTYPE html>
-<html <?php language_attributes(); ?> class="no-js">
+<html <?php language_attributes(); ?> class="no-js"<?php echo eurasiapulse_mod( 'dark_mode_auto' ) ? ' data-theme-auto' : ''; ?>>
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,9 +30,22 @@ $eurasiapulse_logo_tag = ( is_front_page() && ! is_paged() ) ? 'h1' : 'p';
 					?>
 				</time>
 			<?php endif; ?>
-			<nav class="topbar__nav" aria-label="<?php esc_attr_e( 'Secondary', 'eurasiapulse' ); ?>">
-				<?php eurasiapulse_topbar_nav(); ?>
-			</nav>
+			<div class="topbar__right">
+				<nav class="topbar__nav" aria-label="<?php esc_attr_e( 'Secondary', 'eurasiapulse' ); ?>">
+					<?php eurasiapulse_topbar_nav(); ?>
+				</nav>
+				<?php
+				if ( eurasiapulse_mod( 'topbar_show_languages' ) ) {
+					eurasiapulse_language_nav();
+				}
+				if ( eurasiapulse_mod( 'topbar_show_social' ) ) {
+					eurasiapulse_topbar_social();
+				}
+				if ( eurasiapulse_mod( 'dark_mode_toggle' ) ) {
+					eurasiapulse_theme_toggle();
+				}
+				?>
+			</div>
 		</div>
 
 		<div class="masthead">

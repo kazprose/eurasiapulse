@@ -44,6 +44,7 @@ function eurasiapulse_setup() {
 			'footer-sections' => __( 'Footer: Sections column', 'eurasiapulse' ),
 			'footer-regions'  => __( 'Footer: Regions column', 'eurasiapulse' ),
 			'footer-company'  => __( 'Footer: Company column', 'eurasiapulse' ),
+			'footer-bottom'   => __( 'Footer: bottom row (pages)', 'eurasiapulse' ),
 		)
 	);
 

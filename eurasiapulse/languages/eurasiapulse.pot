@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EurasiaPulse 1.0.0\n"
 "Report-Msgid-Bugs-To: https://eurasiapulse.com/\n"
-"POT-Creation-Date: 2026-09-21 21:23+00:00\n"
+"POT-Creation-Date: 2026-09-22 02:06+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: eurasiapulse/author.php:13 eurasiapulse/inc/template-tags.php:728
+#: eurasiapulse/author.php:13 eurasiapulse/inc/template-tags.php:741
 msgid "Author"
 msgstr ""
 
@@ -63,239 +63,303 @@ msgid "Follow"
 msgstr ""
 
 #: eurasiapulse/footer.php:62
+msgid "Pages"
+msgstr ""
+
+#: eurasiapulse/footer.php:71
 msgid "© %1$s %2$s. All rights reserved."
 msgstr ""
 
-#: eurasiapulse/header.php:19
+#: eurasiapulse/header.php:20
 msgid "Skip to content"
 msgstr ""
 
-#: eurasiapulse/header.php:28
+#: eurasiapulse/header.php:29
 msgid "l, F j, Y"
 msgstr ""
 
-#: eurasiapulse/header.php:32
+#: eurasiapulse/header.php:34
 msgid "Secondary"
 msgstr ""
 
-#: eurasiapulse/header.php:50
+#: eurasiapulse/header.php:64
 msgid "Primary"
 msgstr ""
 
-#: eurasiapulse/header.php:54
+#: eurasiapulse/header.php:68
 msgid "Menu"
 msgstr ""
 
-#: eurasiapulse/header.php:57 eurasiapulse/header.php:59 eurasiapulse/inc/template-tags.php:734 eurasiapulse/search.php:13 eurasiapulse/search.php:20 eurasiapulse/searchform.php:13
+#: eurasiapulse/header.php:71 eurasiapulse/header.php:73 eurasiapulse/inc/template-tags.php:747 eurasiapulse/search.php:13 eurasiapulse/search.php:20 eurasiapulse/searchform.php:13
 msgid "Search"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:165
+#: eurasiapulse/inc/customizer.php:174
 msgid "Automatic (default section for this slot)"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:166 eurasiapulse/inc/customizer.php:181
+#: eurasiapulse/inc/customizer.php:175 eurasiapulse/inc/customizer.php:190
 msgid "Hide this block"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:194
+#: eurasiapulse/inc/customizer.php:203
 msgid "Analysis"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:197
+#: eurasiapulse/inc/customizer.php:206
 msgid "Opinion"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:213
+#: eurasiapulse/inc/customizer.php:222
 msgid "EurasiaPulse"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:214
+#: eurasiapulse/inc/customizer.php:223
 msgid "Homepage composition, header and footer links, article options."
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:220
+#: eurasiapulse/inc/customizer.php:229
 msgid "Header"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:221
+#: eurasiapulse/inc/customizer.php:230
 msgid "Homepage blocks"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:222
+#: eurasiapulse/inc/customizer.php:231
 msgid "Article page"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:223
+#: eurasiapulse/inc/customizer.php:232
 msgid "Footer & social"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:224
+#: eurasiapulse/inc/customizer.php:233
 msgid "Structured data"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:268
-msgid "Show today's date in the top bar"
-msgstr ""
-
-#: eurasiapulse/inc/customizer.php:277
-msgid "Newsletter link"
+#: eurasiapulse/inc/customizer.php:234
+msgid "Updates (GitHub)"
 msgstr ""
 
 #: eurasiapulse/inc/customizer.php:278
+msgid "Show today's date in the top bar"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:287
+msgid "Newsletter link"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:288
 msgid "Shown in the top bar when no \"Top bar links\" menu is assigned."
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:289
+#: eurasiapulse/inc/customizer.php:297
+msgid "Show the language switcher"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:298
+msgid "Languages come from Polylang or WPML automatically; otherwise from the list below."
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:307
+msgid "Language links (fallback)"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:308
+msgid "One per line as \"Label|URL\", e.g. \"KK|https://example.com/kk/\". Used only when no multilingual plugin is active."
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:317
+msgid "Show social icons in the top bar"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:318
+msgid "Profile URLs are set under \"Footer & social\"."
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:327
+msgid "Show the light / dark mode switch"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:336
+msgid "Follow the visitor's system dark mode by default"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:337
+msgid "An explicit choice made with the switch always wins."
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:348
 msgid "Lead story layout"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:291
+#: eurasiapulse/inc/customizer.php:350
 msgid "Headline over the image (as in the design)"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:292
+#: eurasiapulse/inc/customizer.php:351
 msgid "Headline below the image"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:302
+#: eurasiapulse/inc/customizer.php:361
 msgid "Lead story selection"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:304
+#: eurasiapulse/inc/customizer.php:363
 msgid "Sticky post if any, otherwise the newest post"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:305
+#: eurasiapulse/inc/customizer.php:364
 msgid "Always the newest post"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:315
+#: eurasiapulse/inc/customizer.php:374
 msgid "Cards under the lead story"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:328
+#: eurasiapulse/inc/customizer.php:387
 msgid "Headlines beside the lead story"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:341
+#: eurasiapulse/inc/customizer.php:400
 msgid "Show thumbnails beside the lead story"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:350
+#: eurasiapulse/inc/customizer.php:409
 msgid "\"Latest\" list: number of items"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:363
+#: eurasiapulse/inc/customizer.php:422
 msgid "\"Latest\" list: show thumbnails"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:372
+#: eurasiapulse/inc/customizer.php:431
 msgid "\"Analysis\" block: format"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:382
+#: eurasiapulse/inc/customizer.php:441
 msgid "\"Analysis\" block: number of cards"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:397
+#: eurasiapulse/inc/customizer.php:456
 msgid "Section block %d: category"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:408
+#: eurasiapulse/inc/customizer.php:467
 msgid "Section blocks: small items beside the lead card"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:421
+#: eurasiapulse/inc/customizer.php:480
 msgid "Show the \"By Region\" strip"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:430
+#: eurasiapulse/inc/customizer.php:489
 msgid "\"Opinion\" block: format"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:440
+#: eurasiapulse/inc/customizer.php:499
 msgid "\"Opinion\" block: number of items"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:455
+#: eurasiapulse/inc/customizer.php:514
 msgid "Show estimated reading time"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:464
+#: eurasiapulse/inc/customizer.php:523
 msgid "Show share links (X, Telegram, LinkedIn, copy link)"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:473
+#: eurasiapulse/inc/customizer.php:532
 msgid "Show the author box"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:482
+#: eurasiapulse/inc/customizer.php:541
 msgid "Related articles"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:495
+#: eurasiapulse/inc/customizer.php:554
 msgid "Enable comments"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:496
+#: eurasiapulse/inc/customizer.php:555
 msgid "Comments are closed site-wide until this is switched on."
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:507
+#: eurasiapulse/inc/customizer.php:566
 msgid "Footer line"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:508
+#: eurasiapulse/inc/customizer.php:567
 msgid "Defaults to the site tagline."
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:513
+#: eurasiapulse/inc/customizer.php:572
 msgid "X (Twitter) profile URL"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:514
+#: eurasiapulse/inc/customizer.php:573
 msgid "Telegram channel URL"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:515
+#: eurasiapulse/inc/customizer.php:574
+msgid "Instagram profile URL"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:575
 msgid "LinkedIn page URL"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:516
+#: eurasiapulse/inc/customizer.php:576
 msgid "Facebook page URL"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:517
+#: eurasiapulse/inc/customizer.php:577
 msgid "YouTube channel URL"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:535
+#: eurasiapulse/inc/customizer.php:595
 msgid "Show RSS link"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:546
+#: eurasiapulse/inc/customizer.php:606
 msgid "Output JSON-LD and Open Graph tags"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:547
+#: eurasiapulse/inc/customizer.php:607
 msgid "Automatically disabled when an SEO plugin (Yoast, Rank Math, AIOSEO, SEOPress, The SEO Framework, Slim SEO) is active."
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:556
+#: eurasiapulse/inc/customizer.php:616
 msgid "Organization logo for structured data"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:557
+#: eurasiapulse/inc/customizer.php:617
 msgid "Square or wide PNG, at least 112px high. Falls back to the site logo."
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:566
+#: eurasiapulse/inc/customizer.php:626
 msgid "Organization profiles (sameAs)"
 msgstr ""
 
-#: eurasiapulse/inc/customizer.php:567
+#: eurasiapulse/inc/customizer.php:627
 msgid "One URL per line. Social profile URLs above are added automatically."
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:638
+msgid "GitHub repository (owner/name)"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:639
+msgid "The theme checks this repository's latest release and offers it under Dashboard > Updates. Each release needs an eurasiapulse.zip asset (built by the bundled GitHub Actions workflow). Can also be set with the EURASIAPULSE_GITHUB_REPO constant."
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:648
+msgid "Install new releases automatically"
+msgstr ""
+
+#: eurasiapulse/inc/customizer.php:649
+msgid "Uses WordPress auto-updates (checked twice a day)."
 msgstr ""
 
 #: eurasiapulse/inc/meta.php:24
@@ -362,11 +426,15 @@ msgstr ""
 msgid "Footer: Company column"
 msgstr ""
 
-#: eurasiapulse/inc/setup.php:74
-msgid "Wide 16:9 (1200px)"
+#: eurasiapulse/inc/setup.php:47
+msgid "Footer: bottom row (pages)"
 msgstr ""
 
 #: eurasiapulse/inc/setup.php:75
+msgid "Wide 16:9 (1200px)"
+msgstr ""
+
+#: eurasiapulse/inc/setup.php:76
 msgid "Card 3:2 (720px)"
 msgstr ""
 
@@ -487,64 +555,80 @@ msgstr ""
 msgid "By %s"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:550
+#: eurasiapulse/inc/template-tags.php:559
 msgid "Newsletter"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:627 eurasiapulse/inc/template-tags.php:694
+#: eurasiapulse/inc/template-tags.php:637 eurasiapulse/inc/template-tags.php:707
 msgid "Telegram"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:628 eurasiapulse/inc/template-tags.php:703
-msgid "LinkedIn"
+#: eurasiapulse/inc/template-tags.php:638
+msgid "Instagram"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:629
+#: eurasiapulse/inc/template-tags.php:639
 msgid "Facebook"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:630
+#: eurasiapulse/inc/template-tags.php:640
 msgid "YouTube"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:645
+#: eurasiapulse/inc/template-tags.php:641 eurasiapulse/inc/template-tags.php:716
+msgid "LinkedIn"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:658
 msgid "RSS"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:716
+#: eurasiapulse/inc/template-tags.php:729
 msgid "Section"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:719
+#: eurasiapulse/inc/template-tags.php:732
 msgid "Region"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:722
+#: eurasiapulse/inc/template-tags.php:735
 msgid "Format"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:725
+#: eurasiapulse/inc/template-tags.php:738
 msgid "Topic"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:731 eurasiapulse/inc/template-tags.php:736
+#: eurasiapulse/inc/template-tags.php:744 eurasiapulse/inc/template-tags.php:749
 msgid "Archive"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:755
+#: eurasiapulse/inc/template-tags.php:768
 msgid "All articles"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:767
+#: eurasiapulse/inc/template-tags.php:780
 msgid "&larr; Newer"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:768
+#: eurasiapulse/inc/template-tags.php:781
 msgid "Older &rarr;"
 msgstr ""
 
-#: eurasiapulse/inc/template-tags.php:769
+#: eurasiapulse/inc/template-tags.php:782
 msgid "Articles navigation"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:882
+msgid "Languages"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:924
+msgid "Switch to dark mode"
+msgstr ""
+
+#: eurasiapulse/inc/template-tags.php:925
+msgid "Switch to light mode"
 msgstr ""
 
 #: eurasiapulse/inc/template-tags.php:217 eurasiapulse/template-parts/article-meta.php:48

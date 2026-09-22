@@ -420,24 +420,33 @@ function eurasiapulse_default_categories() {
 		return $cats;
 	}
 	$cats = array();
+	$seen = array();
+	// Preferred editorial sections first, but only when they actually hold posts.
 	foreach ( array( 'politics', 'economy', 'security', 'energy', 'diplomacy' ) as $slug ) {
 		$term = get_category_by_slug( $slug );
-		if ( $term instanceof WP_Term ) {
-			$cats[] = $term;
+		if ( $term instanceof WP_Term && $term->count > 0 ) {
+			$cats[]                   = $term;
+			$seen[ $term->term_id ] = true;
 		}
 	}
-	if ( ! $cats ) {
+	// Fill up with the most-used top-level categories of the site (current language under Polylang/WPML).
+	if ( count( $cats ) < 5 ) {
 		$all = get_categories(
 			array(
 				'orderby' => 'count',
 				'order'   => 'DESC',
-				'number'  => 6,
+				'number'  => 12,
 				'parent'  => 0,
 			)
 		);
 		foreach ( $all as $term ) {
-			if ( 'uncategorized' !== $term->slug ) {
-				$cats[] = $term;
+			if ( 'uncategorized' === $term->slug || isset( $seen[ $term->term_id ] ) ) {
+				continue;
+			}
+			$cats[]                   = $term;
+			$seen[ $term->term_id ] = true;
+			if ( count( $cats ) >= 5 ) {
+				break;
 			}
 		}
 	}
@@ -453,7 +462,7 @@ function eurasiapulse_nav_format_terms() {
 	$terms = array();
 	foreach ( array( 'analysis', 'opinion' ) as $slug ) {
 		$term = get_term_by( 'slug', $slug, 'format' );
-		if ( $term instanceof WP_Term ) {
+		if ( $term instanceof WP_Term && $term->count > 0 ) {
 			$terms[] = $term;
 		}
 	}
@@ -608,6 +617,7 @@ function eurasiapulse_company_items() {
 		$page = get_page_by_path( $slug );
 		if ( $page instanceof WP_Post && 'publish' === $page->post_status ) {
 			$items[ $page->ID ] = array(
+				'id'    => $page->ID,
 				'url'   => get_permalink( $page ),
 				'label' => get_the_title( $page ),
 			);
@@ -623,17 +633,19 @@ function eurasiapulse_company_items() {
  */
 function eurasiapulse_social_items() {
 	$map   = array(
-		'social_x'        => 'X',
-		'social_telegram' => __( 'Telegram', 'eurasiapulse' ),
-		'social_linkedin' => __( 'LinkedIn', 'eurasiapulse' ),
-		'social_facebook' => __( 'Facebook', 'eurasiapulse' ),
-		'social_youtube'  => __( 'YouTube', 'eurasiapulse' ),
+		'social_x'         => 'X',
+		'social_telegram'  => __( 'Telegram', 'eurasiapulse' ),
+		'social_instagram' => __( 'Instagram', 'eurasiapulse' ),
+		'social_facebook'  => __( 'Facebook', 'eurasiapulse' ),
+		'social_youtube'   => __( 'YouTube', 'eurasiapulse' ),
+		'social_linkedin'  => __( 'LinkedIn', 'eurasiapulse' ),
 	);
 	$items = array();
 	foreach ( $map as $key => $label ) {
 		$url = eurasiapulse_mod( $key );
 		if ( $url ) {
 			$items[] = array(
+				'key'   => substr( $key, 7 ),
 				'url'   => $url,
 				'label' => $label,
 			);
@@ -641,6 +653,7 @@ function eurasiapulse_social_items() {
 	}
 	if ( eurasiapulse_mod( 'social_rss' ) ) {
 		$items[] = array(
+			'key'   => 'rss',
 			'url'   => get_feed_link(),
 			'label' => __( 'RSS', 'eurasiapulse' ),
 		);
@@ -770,4 +783,174 @@ function eurasiapulse_pagination() {
 			'class'              => 'pagination',
 		)
 	);
+}
+
+/* -------------------------------------------------------------------------
+ * Top bar: icons, languages, dark mode; footer pages
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Inline stroke icon (16px, currentColor). Simple geometric glyphs, no icon font.
+ *
+ * @param string $name x, telegram, instagram, facebook, youtube, linkedin, rss, moon, sun.
+ * @return string SVG markup or ''.
+ */
+function eurasiapulse_icon( $name ) {
+	$paths = array(
+		'x'         => '<path d="M4 4l16 16M20 4L4 20"/>',
+		'telegram'  => '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+		'instagram' => '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>',
+		'facebook'  => '<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
+		'youtube'   => '<path d="M2.5 17a24 24 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.6 49.6 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24 24 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.6 49.6 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/>',
+		'linkedin'  => '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>',
+		'rss'       => '<path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1" fill="currentColor"/>',
+		'moon'      => '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+		'sun'       => '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',
+	);
+	if ( ! isset( $paths[ $name ] ) ) {
+		return '';
+	}
+	return '<svg class="icon icon--' . esc_attr( $name ) . '" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' . $paths[ $name ] . '</svg>';
+}
+
+/**
+ * Languages from Polylang or WPML, else the Customizer "Label|URL" list.
+ *
+ * @return array List of [ code, name, url, current ].
+ */
+function eurasiapulse_language_items() {
+	$items = array();
+	if ( function_exists( 'pll_the_languages' ) ) {
+		$langs = pll_the_languages(
+			array(
+				'raw'           => 1,
+				'hide_if_empty' => 0,
+			)
+		);
+		foreach ( (array) $langs as $lang ) {
+			$items[] = array(
+				'code'    => (string) ( $lang['slug'] ?? '' ),
+				'name'    => (string) ( $lang['name'] ?? '' ),
+				'url'     => (string) ( $lang['url'] ?? '' ),
+				'current' => ! empty( $lang['current_lang'] ),
+			);
+		}
+	} else {
+		$langs = apply_filters( 'wpml_active_languages', null, array( 'skip_missing' => 0 ) );
+		foreach ( (array) $langs as $lang ) {
+			$items[] = array(
+				'code'    => (string) ( $lang['language_code'] ?? $lang['code'] ?? '' ),
+				'name'    => (string) ( $lang['native_name'] ?? $lang['translated_name'] ?? '' ),
+				'url'     => (string) ( $lang['url'] ?? '' ),
+				'current' => ! empty( $lang['active'] ),
+			);
+		}
+	}
+	if ( ! $items ) {
+		$current = untrailingslashit( home_url( '/' ) );
+		foreach ( (array) preg_split( '/\r\n|\r|\n/', (string) eurasiapulse_mod( 'language_links' ) ) as $line ) {
+			$parts = array_map( 'trim', explode( '|', $line, 2 ) );
+			if ( count( $parts ) < 2 || '' === $parts[0] || '' === $parts[1] ) {
+				continue;
+			}
+			$items[] = array(
+				'code'    => $parts[0],
+				'name'    => $parts[0],
+				'url'     => $parts[1],
+				'current' => untrailingslashit( $parts[1] ) === $current,
+			);
+		}
+	}
+	$items = array_values( array_filter( $items, static fn( $item ) => '' !== $item['code'] && '' !== $item['url'] ) );
+
+	/**
+	 * Filter the language switcher entries.
+	 *
+	 * @param array $items List of [ code, name, url, current ].
+	 */
+	return apply_filters( 'eurasiapulse_language_items', $items );
+}
+
+/**
+ * Print the language switcher (nothing when there is a single language).
+ */
+function eurasiapulse_language_nav() {
+	$items = eurasiapulse_language_items();
+	if ( count( $items ) < 2 ) {
+		return;
+	}
+	echo '<nav class="lang" aria-label="' . esc_attr__( 'Languages', 'eurasiapulse' ) . '"><ul class="lang__list">';
+	foreach ( $items as $item ) {
+		printf(
+			'<li><a class="lang__link%1$s" href="%2$s" lang="%3$s" hreflang="%3$s" title="%4$s"%5$s>%6$s</a></li>',
+			$item['current'] ? ' is-current' : '',
+			esc_url( $item['url'] ),
+			esc_attr( $item['code'] ),
+			esc_attr( $item['name'] ),
+			$item['current'] ? ' aria-current="true"' : '',
+			esc_html( strtoupper( $item['code'] ) )
+		);
+	}
+	echo '</ul></nav>';
+}
+
+/**
+ * Print the social icons for the top bar.
+ */
+function eurasiapulse_topbar_social() {
+	$items = eurasiapulse_social_items();
+	if ( ! $items ) {
+		return;
+	}
+	echo '<ul class="topbar__social">';
+	foreach ( $items as $item ) {
+		$icon = eurasiapulse_icon( $item['key'] );
+		printf(
+			'<li><a href="%1$s" rel="noopener" aria-label="%2$s">%3$s</a></li>',
+			esc_url( $item['url'] ),
+			esc_attr( $item['label'] ),
+			$icon ? $icon : esc_html( $item['label'] ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
+		);
+	}
+	echo '</ul>';
+}
+
+/**
+ * Print the light / dark mode switch.
+ */
+function eurasiapulse_theme_toggle() {
+	printf(
+		'<button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="%1$s" data-label-dark="%1$s" data-label-light="%2$s">%3$s%4$s</button>',
+		esc_attr__( 'Switch to dark mode', 'eurasiapulse' ),
+		esc_attr__( 'Switch to light mode', 'eurasiapulse' ),
+		eurasiapulse_icon( 'moon' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
+		eurasiapulse_icon( 'sun' ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG.
+	);
+}
+
+/**
+ * Top-level pages for the footer bottom row (up to 8), skipping given IDs.
+ *
+ * @param int[] $exclude Page IDs to leave out.
+ * @return array
+ */
+function eurasiapulse_footer_page_items( $exclude = array() ) {
+	$exclude[] = (int) get_option( 'page_on_front' );
+	$exclude[] = (int) get_option( 'page_for_posts' );
+	$pages     = get_pages(
+		array(
+			'parent'      => 0,
+			'sort_column' => 'menu_order,post_title',
+			'exclude'     => array_filter( array_map( 'intval', $exclude ) ),
+			'number'      => 8,
+		)
+	);
+	$items     = array();
+	foreach ( (array) $pages as $page ) {
+		$items[] = array(
+			'url'   => get_permalink( $page ),
+			'label' => get_the_title( $page ),
+		);
+	}
+	return $items;
 }

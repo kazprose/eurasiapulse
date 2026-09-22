@@ -3,7 +3,7 @@
  * Router for PHP's built-in server so WordPress pretty permalinks work.
  * Usage: php -S 127.0.0.1:8080 -t ../.local/wordpress router.php
  */
-$root = realpath( __DIR__ . '/../.local/wordpress' );
+$root = realpath( $_SERVER['DOCUMENT_ROOT'] ); // php -S -t <absolute dir>
 $path = parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH );
 $file = $root . str_replace( '/', DIRECTORY_SEPARATOR, $path );
 if ( $path !== '/' && is_file( $file ) ) {

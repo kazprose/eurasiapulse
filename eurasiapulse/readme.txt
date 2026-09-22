@@ -12,9 +12,13 @@ A lightweight, classic editorial theme for EurasiaPulse: politics and analysis a
 
 == Description ==
 
-Typography-led news design (Source Serif 4 + Inter, self-hosted), hairline rules, one accent colour, no build step, no plugin dependencies, no jQuery. Built for REST-driven publishing: the `region` and `format` taxonomies and the article meta fields are all exposed to the WordPress REST API.
+Typography-led news design (Source Serif 4 + Inter, self-hosted), hairline rules, one accent colour, light and dark mode, no build step, no plugin dependencies, no jQuery. Built for REST-driven publishing: the `region` and `format` taxonomies and the article meta fields are all exposed to the WordPress REST API.
 
 Templates: composed front page (lead, latest, analysis, section blocks, region strip, opinion), single article (single reading column), shared archive template for categories / regions / formats / tags, author, search, 404, page.
+
+Top bar: date, secondary links, language switcher (Polylang / WPML detected automatically, otherwise a "Label|URL" list in the Customizer), social icons (X, Telegram, Instagram, Facebook, YouTube, LinkedIn, RSS) and a light/dark switch that remembers the visitor's choice and can follow the system setting. Footer: sections, regions, company pages, follow links and a bottom row of page links.
+
+Updates: the theme can update itself from GitHub Releases (see below), no plugin required.
 
 == Installation ==
 
@@ -54,7 +58,20 @@ Without an SEO plugin the theme prints a meta description, canonical links, Open
 
 Inter and Source Serif 4 are bundled as variable WOFF2 subsets (latin, latin-ext, cyrillic, cyrillic-ext) from the Fontsource packages, licensed under the SIL Open Font License 1.1 (see assets/fonts/LICENSE-*.txt). No fonts are loaded from third-party servers.
 
+== Updates from GitHub ==
+
+Customize > EurasiaPulse > Updates (GitHub): enter the repository as "owner/name" (default: kazprose/eurasiapulse) and keep "Install new releases automatically" on. The theme reads the repository's latest release (cached 6 hours), compares its tag (v1.2.0) with the Version header and hands a newer release to WordPress' normal theme updater; with auto-updates on, WordPress installs it on its twice-daily check. Dashboard > Updates > "Check again" forces a check. The release must carry an "eurasiapulse.zip" asset (built by the repository's GitHub Actions workflow on every "v*" tag). Optional constants for wp-config.php: EURASIAPULSE_GITHUB_REPO (overrides the Customizer value) and EURASIAPULSE_GITHUB_TOKEN (private repositories).
+
 == Changelog ==
+
+= 1.1.0 =
+* Fix: on WordPress 6.x the theme.json "global styles" block was printed in the footer and recoloured / underlined every link (black headline over the lead image). Global styles are now kept off the front end entirely and link styles carry higher specificity.
+* New: language switcher in the top bar (Polylang / WPML automatic, manual fallback list).
+* New: social icons in the top bar (X, Telegram, Instagram, Facebook, YouTube, LinkedIn, RSS).
+* New: light / dark mode switch with system preference support.
+* New: footer bottom row with page links (menu location "Footer: bottom row" or top-level pages).
+* New: self-updates from GitHub Releases, with optional automatic installation.
+* Change: navigation and section fallbacks only use categories that contain posts.
 
 = 1.0.0 =
 * Initial release.

@@ -416,7 +416,7 @@ function eurasiapulse_jsonld() {
 		);
 	}
 	$same_as = array_filter( array_map( 'trim', explode( "\n", (string) eurasiapulse_mod( 'org_sameas' ) ) ) );
-	foreach ( array( 'social_x', 'social_telegram', 'social_linkedin', 'social_facebook', 'social_youtube' ) as $key ) {
+	foreach ( array( 'social_x', 'social_telegram', 'social_instagram', 'social_linkedin', 'social_facebook', 'social_youtube' ) as $key ) {
 		$url = eurasiapulse_mod( $key );
 		if ( $url ) {
 			$same_as[] = $url;

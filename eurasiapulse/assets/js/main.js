@@ -74,6 +74,40 @@
 		}
 	} );
 
+	// Light / dark mode switch. The stored choice is applied before paint by an
+	// inline script in the head; here we only toggle and persist it.
+	var themeToggle = document.querySelector( '[data-theme-toggle]' );
+	if ( themeToggle ) {
+		var root = document.documentElement;
+		var prefersDark = window.matchMedia( '(prefers-color-scheme: dark)' );
+		var currentTheme = function () {
+			var explicit = root.getAttribute( 'data-theme' );
+			if ( explicit ) {
+				return explicit;
+			}
+			return ( root.hasAttribute( 'data-theme-auto' ) && prefersDark.matches ) ? 'dark' : 'light';
+		};
+		var renderToggle = function () {
+			var dark = currentTheme() === 'dark';
+			themeToggle.setAttribute( 'aria-pressed', dark ? 'true' : 'false' );
+			themeToggle.setAttribute( 'aria-label', themeToggle.getAttribute( dark ? 'data-label-light' : 'data-label-dark' ) );
+		};
+		themeToggle.addEventListener( 'click', function () {
+			var next = currentTheme() === 'dark' ? 'light' : 'dark';
+			root.setAttribute( 'data-theme', next );
+			try {
+				localStorage.setItem( 'eurasiapulse-theme', next );
+			} catch ( e ) {
+				// Storage unavailable: the choice lasts for this page only.
+			}
+			renderToggle();
+		} );
+		if ( prefersDark.addEventListener ) {
+			prefersDark.addEventListener( 'change', renderToggle );
+		}
+		renderToggle();
+	}
+
 	var copyButton = document.querySelector( '[data-copy-link]' );
 	if ( copyButton && navigator.clipboard && window.isSecureContext ) {
 		copyButton.hidden = false;

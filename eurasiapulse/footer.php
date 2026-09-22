@@ -55,6 +55,15 @@ if ( ! $eurasiapulse_tagline ) {
 			</div>
 		</div>
 
+		<?php
+		$eurasiapulse_pages = has_nav_menu( 'footer-bottom' ) ? array() : eurasiapulse_footer_page_items( wp_list_pluck( $eurasiapulse_company, 'id' ) );
+		if ( has_nav_menu( 'footer-bottom' ) || $eurasiapulse_pages ) :
+			?>
+			<nav class="footer__pages" aria-label="<?php esc_attr_e( 'Pages', 'eurasiapulse' ); ?>">
+				<?php eurasiapulse_footer_nav( 'footer-bottom', $eurasiapulse_pages ); ?>
+			</nav>
+		<?php endif; ?>
+
 		<div class="footer__bottom">
 			<span>
 				<?php
