@@ -14,7 +14,9 @@
  * - The release should carry an "eurasiapulse.zip" asset whose top folder is
  *   "eurasiapulse/" (built by .github/workflows/release.yml). Without an asset
  *   the GitHub zipball is used and its folder is renamed on install.
- * - Private repositories: define EURASIAPULSE_GITHUB_TOKEN in wp-config.php.
+ * - Private repositories: define EURASIAPULSE_GITHUB_TOKEN in wp-config.php
+ *   (fine-grained token with "Contents: read"). API calls and asset downloads
+ *   are then authenticated.
  *
  * @package EurasiaPulse
  */
@@ -34,12 +36,53 @@ function eurasiapulse_github_repo() {
 }
 
 /**
+ * Personal access token for private repositories, or ''.
+ *
+ * @return string
+ */
+function eurasiapulse_github_token() {
+	return ( defined( 'EURASIAPULSE_GITHUB_TOKEN' ) && is_string( EURASIAPULSE_GITHUB_TOKEN ) ) ? trim( EURASIAPULSE_GITHUB_TOKEN ) : '';
+}
+
+/**
+ * GitHub API base URL (filterable so the flow can be tested against a mock).
+ *
+ * @return string
+ */
+function eurasiapulse_github_api_base() {
+	/**
+	 * Filter the GitHub API base URL.
+	 *
+	 * @param string $base Base URL without a trailing slash.
+	 */
+	return untrailingslashit( (string) apply_filters( 'eurasiapulse_github_api_base', 'https://api.github.com' ) );
+}
+
+/**
+ * Request headers for GitHub API calls.
+ *
+ * @param string $accept Accept header value.
+ * @return array
+ */
+function eurasiapulse_github_headers( $accept = 'application/vnd.github+json' ) {
+	$headers = array(
+		'Accept'     => $accept,
+		'User-Agent' => 'EurasiaPulse-Theme/' . EURASIAPULSE_VERSION . '; ' . home_url( '/' ),
+	);
+	$token   = eurasiapulse_github_token();
+	if ( $token ) {
+		$headers['Authorization'] = 'Bearer ' . $token;
+	}
+	return $headers;
+}
+
+/**
  * Transient key for the cached release.
  *
  * @return string
  */
 function eurasiapulse_release_cache_key() {
-	return 'eurasiapulse_release_' . md5( eurasiapulse_github_repo() );
+	return 'eurasiapulse_release_' . md5( eurasiapulse_github_repo() . '|' . eurasiapulse_github_api_base() );
 }
 
 /**
@@ -50,7 +93,7 @@ function eurasiapulse_flush_release_cache() {
 }
 
 /**
- * Latest release from GitHub: [ version, package, url, body ] (version '' when unknown).
+ * Latest release from GitHub: [ version, package, url, body, private ] (version '' when unknown).
  *
  * @return array|null Null when no repository is configured.
  */
@@ -64,25 +107,21 @@ function eurasiapulse_github_release() {
 		return $cached;
 	}
 
-	$args = array(
-		'timeout' => 10,
-		'headers' => array(
-			'Accept'     => 'application/vnd.github+json',
-			'User-Agent' => 'EurasiaPulse-Theme/' . EURASIAPULSE_VERSION . '; ' . home_url( '/' ),
-		),
-	);
-	if ( defined( 'EURASIAPULSE_GITHUB_TOKEN' ) && EURASIAPULSE_GITHUB_TOKEN ) {
-		$args['headers']['Authorization'] = 'Bearer ' . EURASIAPULSE_GITHUB_TOKEN;
-	}
-
 	$release  = array(
 		'version' => '',
 		'package' => '',
 		'url'     => 'https://github.com/' . $repo . '/releases',
 		'body'    => '',
+		'private' => '' !== eurasiapulse_github_token(),
 	);
 	$ttl      = HOUR_IN_SECONDS; // Retry sooner after a failure.
-	$response = wp_remote_get( 'https://api.github.com/repos/' . $repo . '/releases/latest', $args );
+	$response = wp_remote_get(
+		eurasiapulse_github_api_base() . '/repos/' . $repo . '/releases/latest',
+		array(
+			'timeout' => 10,
+			'headers' => eurasiapulse_github_headers(),
+		)
+	);
 	if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
 		$data = json_decode( wp_remote_retrieve_body( $response ), true );
 		if ( is_array( $data ) && ! empty( $data['tag_name'] ) ) {
@@ -90,8 +129,10 @@ function eurasiapulse_github_release() {
 			$release['url']     = ! empty( $data['html_url'] ) ? esc_url_raw( (string) $data['html_url'] ) : $release['url'];
 			$release['body']    = wp_kses_post( (string) ( $data['body'] ?? '' ) );
 			foreach ( (array) ( $data['assets'] ?? array() ) as $asset ) {
-				if ( isset( $asset['name'], $asset['browser_download_url'] ) && 'eurasiapulse.zip' === $asset['name'] ) {
-					$release['package'] = esc_url_raw( (string) $asset['browser_download_url'] );
+				if ( isset( $asset['name'] ) && 'eurasiapulse.zip' === $asset['name'] ) {
+					// Private repositories must download through the API asset URL; public ones use the plain link.
+					$download           = ( $release['private'] && ! empty( $asset['url'] ) ) ? $asset['url'] : ( $asset['browser_download_url'] ?? '' );
+					$release['package'] = esc_url_raw( (string) $download );
 					break;
 				}
 			}
@@ -142,8 +183,8 @@ function eurasiapulse_check_for_update( $transient ) {
 		if ( ! isset( $transient->no_update ) || ! is_array( $transient->no_update ) ) {
 			$transient->no_update = array();
 		}
-		$item['new_version']          = $current;
-		$item['package']              = '';
+		$item['new_version']           = $current;
+		$item['package']               = '';
 		$transient->no_update[ $slug ] = $item;
 		if ( isset( $transient->response[ $slug ] ) ) {
 			unset( $transient->response[ $slug ] );
@@ -152,6 +193,52 @@ function eurasiapulse_check_for_update( $transient ) {
 	return $transient;
 }
 add_filter( 'pre_set_site_transient_update_themes', 'eurasiapulse_check_for_update' );
+
+/**
+ * Download a private-repository asset ourselves: the API needs an Authorization
+ * header and answers with a redirect to a signed storage URL that must be
+ * fetched *without* that header.
+ *
+ * @param bool|WP_Error $reply    Short-circuit value.
+ * @param string        $package  Package URL.
+ * @param WP_Upgrader   $upgrader Upgrader.
+ * @param array         $hook_extra Extra data.
+ * @return bool|string|WP_Error
+ */
+function eurasiapulse_pre_download( $reply, $package, $upgrader, $hook_extra ) {
+	if ( false !== $reply || empty( $hook_extra['theme'] ) || get_template() !== $hook_extra['theme'] ) {
+		return $reply;
+	}
+	$token = eurasiapulse_github_token();
+	$base  = eurasiapulse_github_api_base() . '/repos/' . eurasiapulse_github_repo() . '/releases/assets/';
+	if ( ! $token || 0 !== strpos( (string) $package, $base ) ) {
+		return $reply;
+	}
+	$response = wp_remote_get(
+		$package,
+		array(
+			'timeout'     => 15,
+			'redirection' => 0,
+			'headers'     => eurasiapulse_github_headers( 'application/octet-stream' ),
+		)
+	);
+	if ( is_wp_error( $response ) ) {
+		return $response;
+	}
+	$code     = (int) wp_remote_retrieve_response_code( $response );
+	$location = wp_remote_retrieve_header( $response, 'location' );
+	if ( in_array( $code, array( 301, 302, 303, 307, 308 ), true ) && $location ) {
+		return download_url( $location, 300 );
+	}
+	if ( 200 === $code ) {
+		$file = wp_tempnam( 'eurasiapulse.zip' );
+		if ( $file && false !== file_put_contents( $file, wp_remote_retrieve_body( $response ) ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- temp file for the upgrader.
+			return $file;
+		}
+	}
+	return new WP_Error( 'eurasiapulse_download_failed', sprintf( 'GitHub asset download failed (HTTP %d).', $code ) );
+}
+add_filter( 'upgrader_pre_download', 'eurasiapulse_pre_download', 10, 4 );
 
 /**
  * Normalise the extracted folder name so the theme keeps its directory name

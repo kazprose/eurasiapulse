@@ -64,6 +64,9 @@ Customize > EurasiaPulse > Updates (GitHub): enter the repository as "owner/name
 
 == Changelog ==
 
+= 1.1.1 =
+* Updater: private repositories are supported with EURASIAPULSE_GITHUB_TOKEN (authenticated API calls, asset download through the API with redirect handling); the API base is filterable (eurasiapulse_github_api_base) for testing.
+
 = 1.1.0 =
 * Fix: on WordPress 6.x the theme.json "global styles" block was printed in the footer and recoloured / underlined every link (black headline over the lead image). Global styles are now kept off the front end entirely and link styles carry higher specificity.
 * New: language switcher in the top bar (Polylang / WPML automatic, manual fallback list).

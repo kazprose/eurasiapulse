@@ -91,7 +91,13 @@ Targets (Performance ≥ 90, Accessibility ≥ 95, SEO 100) met. Remaining perfo
 
 **Verification, 1.1.0:** `php -l` clean (38 files); `node --check` clean; WP_DEBUG log empty on 7.1.1 and 6.9.8 for the front end and on 7.1.1 for wp-admin; REST test unchanged (15/15); 36 screenshots regenerated with no horizontal overflow; Lighthouse mobile home / article / category: performance 95 / 98 / 98, accessibility 100 / 100 / 100, best practices 100, SEO 100; `main.css` 35.2 KB raw / 6.9 KB gzip, `main.js` 3.9 KB raw / 1.4 KB gzip.
 
-**Deployment note:** the copy installed on eurasiapulse.com is 1.0.0 and has no updater. Install 1.1.0 once by uploading `eurasiapulse.zip` (or the GitHub release asset) over it; from then on new releases (tag `vX.Y.Z` on GitHub) are picked up and installed automatically.
+**GitHub repository and releases:** the project was pushed to `github.com/kazprose/eurasiapulse` (branch `main`); tag `v1.1.0` triggered the release workflow, which published a GitHub Release with a valid `eurasiapulse.zip` asset (root folder `eurasiapulse/`, 852 KB). Version 1.1.1 adds private-repository support to the updater and is released the same way.
+
+**Updater verification (1.1.1, `dev/test-update.php`):** on the WordPress 6.9.8 instance, with a real copy of the theme downgraded to 1.0.9 and a local mock of the GitHub API serving the *actual* release asset downloaded from GitHub: (a) public path — release parsed, update offered (`new_version` 1.1.0, plain asset URL), `Theme_Upgrader` installed it, version after upgrade 1.1.0, folder name intact; (b) private path with `EURASIAPULSE_GITHUB_TOKEN` — API asset URL used, 302 redirect followed without the token, installed, version 1.1.0; `auto_update_theme` opt-in returns true. The live GitHub API path could not be exercised unauthenticated because **the repository is private** (the API answers 404 without a token).
+
+**Deployment notes:**
+1. The copy installed on eurasiapulse.com is 1.0.0 and has no updater. Install the current release once by uploading `eurasiapulse.zip` over it (Appearance → Themes → Add New → Upload, or the release asset from GitHub); from then on new releases are picked up and installed automatically.
+2. Because the repository is private, choose one: make it public (recommended — GPL theme, nothing secret; then it works with no further setup), or add `define( 'EURASIAPULSE_GITHUB_TOKEN', '…' );` to `wp-config.php` with a fine-grained personal access token limited to this repository with *Contents: read*.
 
 ## 7. How to run locally (Windows, no Docker)
 
